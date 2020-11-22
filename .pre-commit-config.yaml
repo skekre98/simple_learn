@@ -45,7 +45,8 @@ repos:
           - --license-filepath
           - LICENSE
           - --fuzzy-match-generates-todo
-        files: \.py$
+        files: >
+          \.sh$|\.bash$|\.py$|\.yml$|\.yaml$
   - repo: https://github.com/psf/black
     rev: 19.3b0
     hooks:
