@@ -20,6 +20,8 @@
 
 import setuptools
 
+from simple_learn.version import version
+
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
@@ -27,7 +29,7 @@ requirements = ["numpy"]
 
 setuptools.setup(
     name="simple_learn",
-    version="0.0.1",
+    version=version,
     author="Sharvil Kekre",
     python_requires=">=3.6",
     author_email="sharvildev@gmail.com",

@@ -15,8 +15,7 @@ How to get started:
 2. Create a new branch in you current repo from the 'main' branch with issue label.
 3. 'Check out' the code with Git or [GitHub Desktop](https://desktop.github.com/)
 4. Check [contributing.md](CONTRIBUTING.md)
-5. Prior to pushing your changes, run the following command to format/lint your code(The CI pipeline will fail if standards are not met).
+5. Prior to pushing your changes, run the following command to format/lint your code(The CI pipeline will fail if standards are not met) followed by creating a Pull Request (PR) on simple_learn.
 ```bash
 $ pre-commit run --all-files
 ```
-6. Create a Pull Request (PR) on simple_learn.
