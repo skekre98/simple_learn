@@ -50,6 +50,6 @@ git rebase upstream/main
 git push -f
 ```
 
-if `rebase` won't work well, use `git merge master` as alternative.
+if `rebase` won't work well, use `git merge main` as alternative.
 
 It's also possible to send a PR in the opposite direction, but that's not preferred as it will pollute the commit log.
