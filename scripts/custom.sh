@@ -30,3 +30,27 @@ function install_dependencies {
 function setup_env {
     install_dependencies
 }
+
+function build_package {
+    python setup.py sdist bdist_wheel
+}
+
+function github_release {
+    version=$(grep version simple_learn/version.py | awk -F'"' '{print $2}')
+    git tag -a ${version} -m "Release version ${version}" main
+    git push --tags
+}
+
+function release_teardown {
+    rm -rf build/
+    rm -rf dist/
+    rm -rf simple_learn.egg-info
+}
+
+function build_and_release {
+    github_release
+    build_package
+    twine check dist/*
+    twine upload dist/*
+    release_teardown
+}
