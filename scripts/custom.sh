@@ -36,7 +36,7 @@ function build_package {
 }
 
 function github_release {
-    version=$(awk -F'"' '{print $2}' simple_learn/version.py)
+    version=$(grep version simple_learn/version.py | awk -F'"' '{print $2}')
     git tag -a ${version} -m "Release version ${version}" main
     git push --tags
 }
