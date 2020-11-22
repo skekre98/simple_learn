@@ -1,15 +1,15 @@
 # Copyright (c) 2020 Sharvil Kekre skekre98
-#
+ 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
-#
+ 
 # The above copyright notice and this permission notice shall be included in all
 # copies or substantial portions of the Software.
-#
+ 
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -18,28 +18,44 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import setuptools
+---
+default_stages: [commit, push]
+default_language_version:
+  python: python3
+minimum_pre_commit_version: "1.20.0"
 
-with open("README.md", "r") as fh:
-    long_description = fh.read()
-
-requirements = ["numpy"]
-
-setuptools.setup(
-    name="simple_learn",
-    version="0.0.1",
-    author="Sharvil Kekre",
-    python_requires=">=3.6",
-    author_email="sharvildev@gmail.com",
-    description="A python package to simplify data modeling.",
-    long_description=long_description,
-    long_description_content_type="text/markdown",
-    url="https://github.com/skekre98/simple_learn",
-    packages=["simple_learn"],
-    install_requires=requirements,
-    classifiers=[
-        "Programming Language :: Python :: 3.6",
-        "License :: OSI Approved :: MIT License",
-        "Operating System :: OS Independent",
-    ],
-)
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v2.3.0
+    hooks:
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: fix-encoding-pragma
+        args:
+          - --remove
+  - repo: https://github.com/Lucas-C/pre-commit-hooks
+    rev: v1.1.9
+    hooks:
+      - id: insert-license
+        name: Add license for all python files
+        exclude: ^\.github/.*$
+        args:
+          - --comment-style
+          - "|#|"
+          - --license-filepath
+          - LICENSE
+          - --fuzzy-match-generates-todo
+        files: \.py$
+  - repo: https://github.com/psf/black
+    rev: 19.3b0
+    hooks:
+    - id: black
+      name: Black
+      types: [python]
+  - repo: https://github.com/timothycrosley/isort
+    rev: 5.6.4
+    hooks:
+      - id: isort
+        name: Run isort to sort imports
+        args: ['--multi-line', '3', '--trailing-comma']
+        files: \.py$
