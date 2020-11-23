@@ -1,5 +1,3 @@
-#!/bin/bash
-
 # Copyright (c) 2020 Sharvil Kekre skekre98
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,38 +18,20 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-function install_dependencies {
-    python -m pip install --upgrade pip setuptools wheel
-    python -m pip install pre-commit
-    python -m pip install tqdm
-    python -m pip install twine
-    python -m pip install sklearn
-}
+from param_grid import model_param_map
+from sklearn import datasets
+from sklearn.model_selection import GridSearchCV, train_test_split
+from sklearn.utils import all_estimators
 
-function setup_env {
-    install_dependencies
-}
+estimators = all_estimators(type_filter="classifier")
+dataset = datasets.load_wine()
+X = dataset.data
+y = dataset.target
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.30)
 
-function build_package {
-    python setup.py sdist bdist_wheel
-}
-
-function github_release {
-    version=$(grep version simple_learn/version.py | awk -F'"' '{print $2}')
-    git tag -a ${version} -m "Release version ${version}" main
-    git push --tags
-}
-
-function release_teardown {
-    rm -rf build/
-    rm -rf dist/
-    rm -rf simple_learn.egg-info
-}
-
-function build_and_release {
-    github_release
-    build_package
-    twine check dist/*
-    twine upload dist/*
-    release_teardown
-}
+for name, ClassifierClass in estimators:
+    try:
+        if name in model_param_map:
+            print(name)
+    except Exception as e:
+        print("-")

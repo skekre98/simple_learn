@@ -25,7 +25,7 @@ from simple_learn.version import version
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-requirements = ["numpy"]
+requirements = ["numpy", "sklearn>=0.22"]
 
 setuptools.setup(
     name="simple_learn",
