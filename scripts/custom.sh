@@ -57,7 +57,7 @@ function github_release {
     git commit -a -m "Release version ${version}"
     git tag -a ${version} -m "Release version ${version}" release-${version}
     git push origin ${version}
-    git checkout release
+    git checkout main
     git branch -D release-${version}
 }
 
