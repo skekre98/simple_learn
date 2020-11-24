@@ -18,4 +18,4 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from simple_learn.classifiers import simple_classifier
+from simple_learn.classifiers.simple_classifier import SimpleClassifier

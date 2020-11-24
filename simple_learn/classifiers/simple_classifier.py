@@ -25,13 +25,30 @@ from simple_learn.classifiers.param_grid import model_param_map
 
 
 class SimpleClassifier:
-    def __init__(self):
-        # TODO
-        pass
 
-    def fit(self):
-        # TODO
-        pass
+    def __init__(self):
+        self.name = "Empty Model"
+        self.sk_model = None
+        self.training_accuracy = 0.0
+
+    def fit(self, train_x, train_y, folds=3):
+        estimators = all_estimators(type_filter='classifier')
+        max_accuracy = 0.0
+        best_model = None
+        best_name = "Empty Model"
+        for name, ClassifierClass in estimators:
+            if name in model_param_map:
+                param_grid = model_param_map[name]
+                grid_clf = GridSearchCV(svc, parameters, cv=folds, scoring="accuracy")
+                grid_clf.fit(train_x, train_y)
+                if grid_clf.best_score_ > max_accuracy:
+                    max_accuracy = grid_clf.best_score_
+                    best_model = grid_clf.best_estimator_
+                    best_name = name
+        
+        self.name = name
+        self.sk_model = best_model
+        self.training_accuracy = max_accuracy
 
     def predict(self):
         # TODO
