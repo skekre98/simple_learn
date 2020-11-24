@@ -25,6 +25,7 @@ function install_dependencies {
     python -m pip install pre-commit
     python -m pip install tqdm
     python -m pip install twine
+    python -m pip install sklearn
 }
 
 function setup_env {
@@ -37,8 +38,27 @@ function build_package {
 
 function github_release {
     version=$(grep version simple_learn/version.py | awk -F'"' '{print $2}')
-    git tag -a ${version} -m "Release version ${version}" main
-    git push --tags
+    git add .
+    git commit -m "New release"
+    git checkout -b release-${version}
+    rm -rf scripts/
+    rm -rf build/
+    rm -rf simple_learn.egg-info
+    rm -rf simple_learn/
+    rm .gitignore
+    rm .pre-commit-config.yaml
+    rm CONTRIBUTING.md
+    rm LICENSE
+    rm README.md
+    rm setup.py
+    mv dist/* .
+    rm -rf dist/
+    git add .
+    git commit -a -m "Release version ${version}"
+    git tag -a ${version} -m "Release version ${version}" release-${version}
+    git push origin ${version}
+    git checkout main
+    git branch -D release-${version}
 }
 
 function release_teardown {
@@ -48,9 +68,9 @@ function release_teardown {
 }
 
 function build_and_release {
-    github_release
     build_package
     twine check dist/*
     twine upload dist/*
+    github_release
     release_teardown
 }

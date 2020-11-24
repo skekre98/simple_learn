@@ -18,30 +18,20 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import setuptools
+from param_grid import model_param_map
+from sklearn import datasets
+from sklearn.model_selection import GridSearchCV, train_test_split
+from sklearn.utils import all_estimators
 
-from simple_learn.version import version
+estimators = all_estimators(type_filter="classifier")
+dataset = datasets.load_wine()
+X = dataset.data
+y = dataset.target
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.30)
 
-with open("README.md", "r") as fh:
-    long_description = fh.read()
-
-requirements = ["numpy", "sklearn>=0.22"]
-
-setuptools.setup(
-    name="simple_learn",
-    version=version,
-    author="Sharvil Kekre",
-    python_requires=">=3.6",
-    author_email="sharvildev@gmail.com",
-    description="A python package to simplify data modeling.",
-    long_description=long_description,
-    long_description_content_type="text/markdown",
-    url="https://github.com/skekre98/simple_learn",
-    packages=["simple_learn"],
-    install_requires=requirements,
-    classifiers=[
-        "Programming Language :: Python :: 3.6",
-        "License :: OSI Approved :: MIT License",
-        "Operating System :: OS Independent",
-    ],
-)
+for name, ClassifierClass in estimators:
+    try:
+        if name in model_param_map:
+            print(name)
+    except Exception as e:
+        print("-")
