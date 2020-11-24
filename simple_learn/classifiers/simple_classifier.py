@@ -18,7 +18,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from param_grid import model_param_map
+from simple_learn.classifiers.param_grid import model_param_map
 from sklearn import datasets
 from sklearn.model_selection import GridSearchCV, train_test_split
 from sklearn.utils import all_estimators
