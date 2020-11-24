@@ -2,6 +2,19 @@
 
 A python package to simplify data modeling.
 
+## Build Locally
+
+You can build your most recent changes by running the following command from the root directory:
+```
+$ pip install -e ."[devel]"
+```
+
+You can then import the package into your own code:
+```python
+# With recent changes
+import simple_learn
+```
+
 ## Contributing
 
 There is a lot to do so contributions are really appreciated! This is a great project for early stage developers to work with.

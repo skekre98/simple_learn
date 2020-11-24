@@ -18,20 +18,21 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from param_grid import model_param_map
-from sklearn import datasets
-from sklearn.model_selection import GridSearchCV, train_test_split
+from sklearn.model_selection import GridSearchCV
 from sklearn.utils import all_estimators
 
-estimators = all_estimators(type_filter="classifier")
-dataset = datasets.load_wine()
-X = dataset.data
-y = dataset.target
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.30)
+from simple_learn.classifiers.param_grid import model_param_map
 
-for name, ClassifierClass in estimators:
-    try:
-        if name in model_param_map:
-            print(name)
-    except Exception as e:
-        print("-")
+
+class SimpleClassifier:
+    def __init__(self):
+        # TODO
+        pass
+
+    def fit(self):
+        # TODO
+        pass
+
+    def predict(self):
+        # TODO
+        pass
