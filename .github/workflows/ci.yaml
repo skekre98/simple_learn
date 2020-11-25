@@ -36,11 +36,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Install python3.6
-        run: apt-get install python3.6
+      - name: Install Python 3.6
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.6
       - name: Install requirements
-        run: pip3.6 install -r requirements.txt
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
       - name: Build current package
-        run: pip3.6 install -e ."[devel]"
+        run: pip install -e ."[devel]"
       - name: Run tests
         run: ./scripts/test.sh

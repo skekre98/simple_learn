@@ -76,5 +76,5 @@ function build_and_release {
 }
 
 function run_tests {
-    python3.6 -W ignore -m unittest tests/simple_classifier_tests.py
+    python -W ignore -m unittest tests/simple_classifier_tests.py
 }
