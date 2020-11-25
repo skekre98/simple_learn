@@ -48,4 +48,4 @@ jobs:
         run: pip install -e ."[devel]"
       - name: Run tests
         run: |
-          python -W ignore -m unittest tests/classifiers/simple_classifier_tests.py -v
+          ./scripts/test.sh
