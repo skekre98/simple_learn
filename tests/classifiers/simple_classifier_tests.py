@@ -42,7 +42,6 @@ class TestSimpleClassifier(unittest.TestCase):
         clf.fit(X_train, y_train)
         self.assertIsNotNone(clf.sk_model)
         self.assertTrue(clf.training_accuracy > 0.0)
-        print(clf.sk_model)
 
 
 if __name__ == "__main__":

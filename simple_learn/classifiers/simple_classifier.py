@@ -19,6 +19,7 @@
 # SOFTWARE.
 
 from sklearn.model_selection import GridSearchCV
+from sklearn.tree import DecisionTreeClassifier
 from sklearn.utils import all_estimators
 
 from simple_learn.classifiers.param_grid import model_param_map
@@ -38,7 +39,13 @@ class SimpleClassifier:
         for name, ClassifierClass in estimators:
             if name in model_param_map:
                 param_grid = model_param_map[name]
-                grid_clf = GridSearchCV(svc, parameters, cv=folds, scoring="accuracy")
+                grid_clf = GridSearchCV(
+                    ClassifierClass(),
+                    param_grid,
+                    cv=folds,
+                    scoring="accuracy",
+                    n_jobs=-1,
+                )
                 grid_clf.fit(train_x, train_y)
                 if grid_clf.best_score_ > max_accuracy:
                     max_accuracy = grid_clf.best_score_

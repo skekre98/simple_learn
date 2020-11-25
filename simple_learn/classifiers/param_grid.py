@@ -43,7 +43,6 @@ model_param_map = {
         "binarize": [*np.linspace(0.0, 1, 3)],
         "fit_prior": [True, False],
     },
-    "CategoricalNB": {"alpha": np.linspace(0.1, 1, 3), "fit_prior": [True, False]},
     "ComplementNB": {
         "alpha": np.linspace(0.1, 1, 3),
         "fit_prior": [True, False],
@@ -65,13 +64,11 @@ model_param_map = {
     },
     "GradientBoostingClassifier": {
         "loss": ["deviance"],
-        "learning_rate": [0.01, 0.025, 0.05, 0.075, 0.1, 0.15, 0.2],
-        "min_samples_split": np.linspace(0.1, 0.5, 12),
-        "min_samples_leaf": np.linspace(0.1, 0.5, 12),
-        "max_depth": np.arange(3, 15),
+        "min_samples_split": np.linspace(0.1, 0.5, 3),
+        "min_samples_leaf": np.linspace(0.1, 0.5, 3),
+        "max_depth": np.arange(3, 8),
         "max_features": ["log2", "sqrt"],
         "criterion": ["friedman_mse", "mae"],
-        "subsample": [0.5, 0.618, 0.8, 0.85, 0.9, 0.95, 1.0],
         "n_estimators": [10],
     },
     "HistGradientBoostingClassifier": {
@@ -84,40 +81,22 @@ model_param_map = {
         "weights": ["uniform", "distance"],
         "metric": ["euclidean", "manhattan"],
     },
-    "LinearSVC": {
-        "penalty": ["l1", "l2"],
-        "loss": ["hinge", "squared_hinge"],
-        "dual": [True, False],
-        "tol": [1, 0.1, 0.01, 0.001, 0.0001],
-        "C": [0.1, 1, 10, 100],
-        "multi_class": ["ovr", "crammer_singer"],
-    },
     "LogisticRegression": {
         "penalty": ["l1", "l2"],
         "C": [0.001, 0.01, 0.1, 1, 10, 100, 1000],
     },
     "MLPClassifier": {
         "solver": ["lbfgs"],
-        "max_iter": [1000, 1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000],
-        "alpha": 10.0 ** -np.arange(1, 7),
+        "max_iter": [1000, 1100],
+        "alpha": 10.0 ** -np.arange(1, 3),
         "hidden_layer_sizes": np.arange(10, 15),
         "random_state": [0, 1, 2, 3, 4],
     },
-    "PassiveAggressiveClassifier": {
-        "C": [0.1, 1, 10, 100],
-        "max_iter": [1, 10, 100],
-        "tol": [1, 0.1, 0.01, 0.001, 0.0001],
-    },
     "Perceptron": {
         "penalty": ["l1", "l2", "elasticnet"],
-        "alpha": 10.0 ** -np.arange(1, 7),
+        "alpha": 10.0 ** -np.arange(1, 3),
         "max_iter": [1, 10, 100],
         "tol": [1, 0.1, 0.01, 0.001, 0.0001],
-    },
-    "RadiusNeighborsClassifier": {
-        "weights": ["uniform", "distance"],
-        "algorithm": ["auto"],
-        "leaf_size": np.arange(20, 40),
     },
     "RandomForestClassifier": {
         "n_estimators": [200, 500],
@@ -127,13 +106,9 @@ model_param_map = {
         "random_state": [42],
     },
     "RidgeClassifier": {
-        "kernel": ["rbf", "linear"],
-        "gamma": [1e-3, 1e-4],
-        "C": [1, 10, 100, 1000],
+        "alpha": 10.0 ** -np.arange(1, 3),
+        "max_iter": [1, 10, 100],
+        "tol": [1, 0.1, 0.01, 0.001, 0.0001],
     },
     "SGDClassifier": {"alpha": [0.0001, 0.001, 0.01, 0.1, 1, 10], "max_iter": [1000]},
-    "SVC": {
-        "C": [1, 10, 100, 1000],
-        "kernel": ["linear", "poly", "rbf", "sigmoid", "precomputed"],
-    },
 }
