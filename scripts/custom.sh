@@ -76,5 +76,6 @@ function build_and_release {
 }
 
 function run_tests {
+    ls
     python -W ignore -m unittest tests/simple_classifier_tests.py
 }
