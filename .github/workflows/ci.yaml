@@ -21,7 +21,6 @@
 ---
 name: CI
 on:
-  - push
   - pull_request
 
 jobs:
@@ -37,6 +36,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Install python3.6
+        run: apt install python3.6
       - name: Install requirements
         run: pip3.6 install -r requirements.txt
       - name: Build current package
