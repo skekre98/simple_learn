@@ -19,6 +19,7 @@
 # SOFTWARE.
 
 from sklearn.model_selection import GridSearchCV
+from sklearn.tree import DecisionTreeClassifier
 from sklearn.utils import all_estimators
 
 from simple_learn.classifiers.param_grid import model_param_map
@@ -26,13 +27,34 @@ from simple_learn.classifiers.param_grid import model_param_map
 
 class SimpleClassifier:
     def __init__(self):
-        # TODO
-        pass
+        self.name = "Empty Model"
+        self.sk_model = None
+        self.training_accuracy = 0.0
 
-    def fit(self):
-        # TODO
-        pass
+    def fit(self, train_x, train_y, folds=3):
+        estimators = all_estimators(type_filter="classifier")
+        max_accuracy = 0.0
+        best_model = None
+        best_name = "Empty Model"
+        for name, ClassifierClass in estimators:
+            if name in model_param_map:
+                param_grid = model_param_map[name]
+                grid_clf = GridSearchCV(
+                    ClassifierClass(),
+                    param_grid,
+                    cv=folds,
+                    scoring="accuracy",
+                    n_jobs=-1,
+                )
+                grid_clf.fit(train_x, train_y)
+                if grid_clf.best_score_ > max_accuracy:
+                    max_accuracy = grid_clf.best_score_
+                    best_model = grid_clf.best_estimator_
+                    best_name = name
 
-    def predict(self):
-        # TODO
-        pass
+        self.name = name
+        self.sk_model = best_model
+        self.training_accuracy = max_accuracy
+
+    def predict(self, pred_x):
+        return self.sk_model.predict(pred_x)

@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Copyright (c) 2020 Sharvil Kekre skekre98
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -18,4 +20,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from simple_learn.classifiers.simple_classifier import SimpleClassifier
+. scripts/custom.sh
+
+run_tests
