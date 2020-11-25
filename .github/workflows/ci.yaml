@@ -47,4 +47,5 @@ jobs:
       - name: Build current package
         run: pip install -e ."[devel]"
       - name: Run tests
-        run: ./scripts/test.sh
+        run: |
+          python -W ignore -m unittest tests/classifiers/simple_classifier_tests.py -v
