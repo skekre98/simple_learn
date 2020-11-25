@@ -43,3 +43,7 @@ class TestSimpleClassifier(unittest.TestCase):
         self.assertIsNotNone(clf.sk_model)
         self.assertTrue(clf.training_accuracy > 0.0)
         print(clf.sk_model)
+
+
+if __name__ == "__main__":
+    unittest.main()
