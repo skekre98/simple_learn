@@ -25,14 +25,13 @@ from simple_learn.classifiers.param_grid import model_param_map
 
 
 class SimpleClassifier:
-
     def __init__(self):
         self.name = "Empty Model"
         self.sk_model = None
         self.training_accuracy = 0.0
 
     def fit(self, train_x, train_y, folds=3):
-        estimators = all_estimators(type_filter='classifier')
+        estimators = all_estimators(type_filter="classifier")
         max_accuracy = 0.0
         best_model = None
         best_name = "Empty Model"
@@ -45,11 +44,10 @@ class SimpleClassifier:
                     max_accuracy = grid_clf.best_score_
                     best_model = grid_clf.best_estimator_
                     best_name = name
-        
+
         self.name = name
         self.sk_model = best_model
         self.training_accuracy = max_accuracy
 
-    def predict(self):
-        # TODO
-        pass
+    def predict(self, pred_x):
+        return self.sk_model.predict(pred_x)

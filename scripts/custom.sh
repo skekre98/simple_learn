@@ -74,3 +74,7 @@ function build_and_release {
     github_release
     release_teardown
 }
+
+function run_tests {
+    python3.6 -W ignore -m unittest tests/simple_classifier_tests.py
+}
