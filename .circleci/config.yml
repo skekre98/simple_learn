@@ -1,0 +1,24 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/python:3.6
+    steps:
+      - checkout
+      - restore_cache:
+          key: deps1-{{ .Branch }}-{{ checksum "requirements.txt" }}
+      - run:
+          name: Setup
+          command: |
+            ./scripts/setup.sh
+      - run:
+          name: Static Checks
+          command: |
+            pre-commit run --all-files --show-diff-on-failure --color=always
+      - run:
+          name: Unit Tests
+          command: |
+            ./scripts/test.sh
+      - store_artifacts:
+          path: test-reports/
+          destination: simple_learn
