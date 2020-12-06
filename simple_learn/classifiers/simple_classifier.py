@@ -73,7 +73,9 @@ class SimpleClassifier:
                     self.metrics["Jaccard Score"] = jaccard_score(
                         train_y, pred_y, average="macro"
                     )
-                    self.metrics["ROC Score"] = roc_auc_score(train_y, pred_y)
+                    self.metrics["ROC Score"] = roc_auc_score(
+                        train_y, pred_y, multi_class="ovo"
+                    )
                     self.metrics["F1 Score"] = f1_score(
                         train_y, pred_y, average="macro"
                     )
