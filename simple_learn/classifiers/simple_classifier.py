@@ -18,6 +18,9 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import json
+
+from sklearn.metrics import f1_score, jaccard_score
 from sklearn.model_selection import GridSearchCV
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.utils import all_estimators
@@ -30,6 +33,16 @@ class SimpleClassifier:
         self.name = "Empty Model"
         self.sk_model = None
         self.training_accuracy = 0.0
+        self.metrics = dict()
+
+    def __str__(self):
+        attr = {
+            "Type": self.name,
+            "Training Accuracy": self.training_accuracy,
+            "Metrics": self.metrics,
+        }
+
+        return json.dumps(attr, indent=4)
 
     def fit(self, train_x, train_y, folds=3):
         estimators = all_estimators(type_filter="classifier")
@@ -51,6 +64,13 @@ class SimpleClassifier:
                     max_accuracy = grid_clf.best_score_
                     best_model = grid_clf.best_estimator_
                     best_name = name
+                    pred_y = grid_clf.predict(train_x)
+                    self.metrics["Jaccard Score"] = jaccard_score(
+                        train_y, pred_y, average="macro"
+                    )
+                    self.metrics["F1 Score"] = f1_score(
+                        train_y, pred_y, average="macro"
+                    )
 
         self.name = name
         self.sk_model = best_model
