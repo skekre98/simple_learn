@@ -12,6 +12,10 @@ jobs:
           command: |
             ./scripts/setup.sh
       - run:
+          name: Static Checks
+          command: |
+            pre-commit run --all-files --show-diff-on-failure --color=always
+      - run:
           name: Unit Tests
           command: |
             ./scripts/test.sh
