@@ -21,4 +21,4 @@ jobs:
             ./scripts/test.sh
       - store_artifacts:
           path: test-reports/
-          destination: NBA-Search
+          destination: simple_learn
