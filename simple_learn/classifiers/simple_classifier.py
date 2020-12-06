@@ -70,9 +70,13 @@ class SimpleClassifier:
                     best_model = grid_clf.best_estimator_
                     best_name = name
                     pred_y = grid_clf.predict(train_x)
-                    self.metrics["Jaccard Score"] = jaccard_score(train_y, pred_y)
+                    self.metrics["Jaccard Score"] = jaccard_score(
+                        train_y, pred_y, average="macro"
+                    )
                     self.metrics["ROC Score"] = roc_auc_score(train_y, pred_y)
-                    self.metrics["F1 Score"] = f1_score(train_y, pred_y)
+                    self.metrics["F1 Score"] = f1_score(
+                        train_y, pred_y, average="macro"
+                    )
                     self.metrics["Precision Score"] = average_precision_score(
                         train_y, pred_y
                     )
