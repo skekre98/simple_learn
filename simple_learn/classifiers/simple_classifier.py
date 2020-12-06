@@ -20,7 +20,7 @@
 
 import json
 
-from sklearn.metrics import average_precision_score, f1_score, jaccard_score
+from sklearn.metrics import f1_score, jaccard_score
 from sklearn.model_selection import GridSearchCV
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.utils import all_estimators
@@ -70,9 +70,6 @@ class SimpleClassifier:
                     )
                     self.metrics["F1 Score"] = f1_score(
                         train_y, pred_y, average="macro"
-                    )
-                    self.metrics["Precision Score"] = average_precision_score(
-                        train_y, pred_y
                     )
 
         self.name = name
