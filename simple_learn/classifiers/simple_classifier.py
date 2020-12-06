@@ -20,12 +20,7 @@
 
 import json
 
-from sklearn.metrics import (
-    average_precision_score,
-    f1_score,
-    jaccard_score,
-    roc_auc_score,
-)
+from sklearn.metrics import average_precision_score, f1_score, jaccard_score
 from sklearn.model_selection import GridSearchCV
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.utils import all_estimators
@@ -72,9 +67,6 @@ class SimpleClassifier:
                     pred_y = grid_clf.predict(train_x)
                     self.metrics["Jaccard Score"] = jaccard_score(
                         train_y, pred_y, average="macro"
-                    )
-                    self.metrics["ROC Score"] = roc_auc_score(
-                        train_y, pred_y, multi_class="ovo"
                     )
                     self.metrics["F1 Score"] = f1_score(
                         train_y, pred_y, average="macro"
