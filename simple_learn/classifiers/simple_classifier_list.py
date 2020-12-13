@@ -48,6 +48,7 @@ class SimpleClassifierListObject:
             "GridSearch Duration": "{}s".format(self.clf.gridsearch_duration),
             "Parameters": self.clf.attributes,
             "Metrics": self.clf.metrics,
+            "Index": self.rank - 1,
         }
 
         return json.dumps(attr, indent=4)
@@ -103,3 +104,6 @@ class SimpleClassifierList:
                 self.ranked_list.append(clf)
         metrik = lambda clf: clf.metrics[self.metric]
         self.ranked_list.sort(reverse=True, key=metrik)
+
+    def pop(self, index=0):
+        self.ranked_list.pop(index)
