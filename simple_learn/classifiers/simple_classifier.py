@@ -19,7 +19,9 @@
 # SOFTWARE.
 
 import json
+import time
 
+import numpy as np
 from sklearn.metrics import f1_score, jaccard_score
 from sklearn.model_selection import GridSearchCV
 from sklearn.tree import DecisionTreeClassifier
@@ -32,13 +34,22 @@ class SimpleClassifier:
     def __init__(self):
         self.name = "Empty Model"
         self.sk_model = None
-        self.training_accuracy = 0.0
+        self.attributes = dict()
         self.metrics = dict()
+        self.gridsearch_duration = None
+        self.train_duration = None
 
     def __str__(self):
+
+        for k in self.attributes:
+            if type(self.attributes[k]) == np.int64:
+                self.attributes[k] = int(self.attributes[k])
+
         attr = {
             "Type": self.name,
-            "Training Accuracy": self.training_accuracy,
+            "Training Duration": "{}s".format(self.train_duration),
+            "GridSearch Duration": "{}s".format(self.gridsearch_duration),
+            "Parameters": self.attributes,
             "Metrics": self.metrics,
         }
 
@@ -46,9 +57,6 @@ class SimpleClassifier:
 
     def fit(self, train_x, train_y, folds=3):
         estimators = all_estimators(type_filter="classifier")
-        max_accuracy = 0.0
-        best_model = None
-        best_name = "Empty Model"
         for name, ClassifierClass in estimators:
             if name in model_param_map:
                 param_grid = model_param_map[name]
@@ -57,13 +65,14 @@ class SimpleClassifier:
                     param_grid,
                     cv=folds,
                     scoring="accuracy",
+                    verbose=0,
                     n_jobs=-1,
                 )
+                start = time.time()
                 grid_clf.fit(train_x, train_y)
-                if grid_clf.best_score_ > max_accuracy:
-                    max_accuracy = grid_clf.best_score_
-                    best_model = grid_clf.best_estimator_
-                    best_name = name
+                end = time.time()
+                if grid_clf.best_score_ > self.metrics.get("Training Accuracy", 0.0):
+                    self.metrics["Training Accuracy"] = grid_clf.best_score_
                     pred_y = grid_clf.predict(train_x)
                     self.metrics["Jaccard Score"] = jaccard_score(
                         train_y, pred_y, average="macro"
@@ -71,10 +80,11 @@ class SimpleClassifier:
                     self.metrics["F1 Score"] = f1_score(
                         train_y, pred_y, average="macro"
                     )
-
-        self.name = name
-        self.sk_model = best_model
-        self.training_accuracy = max_accuracy
+                    self.sk_model = grid_clf.best_estimator_
+                    self.name = name
+                    self.attributes = grid_clf.best_params_
+                    self.train_duration = grid_clf.refit_time_
+                    self.gridsearch_duration = end - start
 
     def predict(self, pred_x):
         return self.sk_model.predict(pred_x)

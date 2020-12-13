@@ -18,50 +18,34 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import unittest
-import warnings
+# ML package
+from sklearn.datasets import load_iris
 
-warnings.filterwarnings("ignore")
-
-from sklearn import datasets
-from sklearn.exceptions import ConvergenceWarning, FitFailedWarning
-from sklearn.metrics import accuracy_score
-from sklearn.model_selection import train_test_split
-
+# pip package
 from simple_learn.classifiers import SimpleClassifier
 
 
-class TestSimpleClassifier(unittest.TestCase):
-    def test_init(self):
+class SimpleRunner:
+    def __init__(self):
+        iris = load_iris()
+        self.x = iris.data
+        self.y = iris.target
+
+    def run(self):
+        # print SimpleClassifier created by iris dataset
+        print("Creating classification model...")
+        self.simple_classifier()
+
+    def simple_classifier(self):
         clf = SimpleClassifier()
-        self.assertEqual(clf.name, "Empty Model")
+        clf.fit(self.x, self.y)
+        print(clf)
 
-    def test_wine(self):
-        wine = datasets.load_wine()
-        true_x = wine.data
-        true_y = wine.target
 
-        clf = SimpleClassifier()
-        clf.fit(true_x, true_y)
-        self.assertIsNotNone(clf.sk_model)
-        self.assertTrue(clf.metrics["Training Accuracy"] > 0.0)
-
-        pred_y = clf.predict(true_x)
-        self.assertTrue(accuracy_score(true_y, pred_y) > 0.95)
-
-    def test_iris(self):
-        iris = datasets.load_iris()
-        true_x = iris.data
-        true_y = iris.target
-
-        clf = SimpleClassifier()
-        clf.fit(true_x, true_y)
-        self.assertIsNotNone(clf.sk_model)
-        self.assertTrue(clf.metrics["Training Accuracy"] > 0.0)
-
-        pred_y = clf.predict(true_x)
-        self.assertTrue(accuracy_score(true_y, pred_y) > 0.95)
+def main():
+    SR = SimpleRunner()
+    SR.run()
 
 
 if __name__ == "__main__":
-    unittest.main()
+    main()

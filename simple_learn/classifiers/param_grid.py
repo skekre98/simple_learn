@@ -19,23 +19,6 @@
 # SOFTWARE.
 
 import numpy as np
-from sklearn.gaussian_process.kernels import (
-    RBF,
-    ConstantKernel,
-    ExpSineSquared,
-    RationalQuadratic,
-)
-
-ker_rbf = ConstantKernel(1.0, constant_value_bounds="fixed") * RBF(
-    1.0, length_scale_bounds="fixed"
-)
-ker_rq = ConstantKernel(1.0, constant_value_bounds="fixed") * RationalQuadratic(
-    alpha=0.1, length_scale=1
-)
-ker_expsine = ConstantKernel(1.0, constant_value_bounds="fixed") * ExpSineSquared(
-    1.0, 5.0, periodicity_bounds=(1e-2, 1e1)
-)
-kernel_list = [ker_rbf, ker_rq, ker_expsine]
 
 model_param_map = {
     "BernoulliNB": {
@@ -57,11 +40,6 @@ model_param_map = {
         "splitter": ["random", "best"],
         "max_depth": np.arange(3, 15),
     },
-    "GaussianProcessClassifier": {
-        "kernel": kernel_list,
-        "optimizer": ["fmin_l_bfgs_b"],
-        "n_restarts_optimizer": [1, 2, 3],
-    },
     "GradientBoostingClassifier": {
         "loss": ["deviance"],
         "min_samples_split": np.linspace(0.1, 0.5, 3),
@@ -72,7 +50,7 @@ model_param_map = {
         "n_estimators": [10],
     },
     "HistGradientBoostingClassifier": {
-        "loss": ["auto", "binary_crossentropy", "categorical_crossentropy"],
+        "loss": ["auto", "categorical_crossentropy"],
         "learning_rate": [0.01, 0.025, 0.05, 0.075, 0.1, 0.15, 0.2],
         "max_depth": np.arange(3, 15),
     },
@@ -81,21 +59,8 @@ model_param_map = {
         "weights": ["uniform", "distance"],
         "metric": ["euclidean", "manhattan"],
     },
-    "LogisticRegression": {
-        "penalty": ["l1", "l2"],
-        "C": [0.001, 0.01, 0.1, 1, 10, 100, 1000],
-    },
-    "MLPClassifier": {
-        "solver": ["lbfgs"],
-        "max_iter": [1000, 1100],
-        "alpha": 10.0 ** -np.arange(1, 3),
-        "hidden_layer_sizes": np.arange(10, 15),
-        "random_state": [0, 1, 2, 3, 4],
-    },
     "Perceptron": {
-        "penalty": ["l1", "l2", "elasticnet"],
         "alpha": 10.0 ** -np.arange(1, 3),
-        "max_iter": [1, 10, 100],
         "tol": [1, 0.1, 0.01, 0.001, 0.0001],
     },
     "RandomForestClassifier": {
@@ -107,8 +72,7 @@ model_param_map = {
     },
     "RidgeClassifier": {
         "alpha": 10.0 ** -np.arange(1, 3),
-        "max_iter": [1, 10, 100],
         "tol": [1, 0.1, 0.01, 0.001, 0.0001],
     },
-    "SGDClassifier": {"alpha": [0.0001, 0.001, 0.01, 0.1, 1, 10], "max_iter": [1000]},
+    "SGDClassifier": {"alpha": [0.0001, 0.001, 0.01, 0.1, 1, 10]},
 }
