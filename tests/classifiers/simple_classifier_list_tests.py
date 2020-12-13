@@ -40,8 +40,8 @@ class TestSimpleClassifierList(unittest.TestCase):
         clf_list.fit(true_x, true_y)
         self.assertTrue(len(clf_list.ranked_list) > 0)
 
-        clf1 = self.pop(1)
-        clf0 = self.pop()
+        clf1 = clf_list.pop(1)
+        clf0 = clf_list.pop()
 
         pred1_y = clf1.predict(true_x)
         pred0_y = clf0.predict(true_x)
@@ -57,8 +57,8 @@ class TestSimpleClassifierList(unittest.TestCase):
         clf_list.fit(true_x, true_y)
         self.assertTrue(len(clf_list.ranked_list) > 0)
 
-        clf1 = self.pop(1)
-        clf0 = self.pop()
+        clf1 = clf_list.pop(1)
+        clf0 = clf_list.pop()
 
         pred1_y = clf1.predict(true_x)
         pred0_y = clf0.predict(true_x)
