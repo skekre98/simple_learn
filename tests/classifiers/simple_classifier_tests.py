@@ -19,6 +19,9 @@
 # SOFTWARE.
 
 import unittest
+import warnings
+
+warnings.filterwarnings("ignore")
 
 from sklearn import datasets
 from sklearn.exceptions import ConvergenceWarning, FitFailedWarning
