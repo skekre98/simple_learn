@@ -29,24 +29,20 @@ from simple_learn.classifiers import SimpleClassifier
 
 
 class TestSimpleClassifier(unittest.TestCase):
-    def __init__(self):
-        wine = datasets.load_wine()
-        self.x = wine.data
-        self.y = wine.target
-        self.clf = SimpleClassifier()
-
     def test_init(self):
+        clf = SimpleClassifier()
         self.assertEqual(clf.name, "Empty Model")
         self.assertEqual(clf.training_accuracy, 0.0)
 
-    def test_fit(self):
-        clf.fit(self.x, self.y)
+    def test_fit_and_predict(self):
+        wine = datasets.load_wine()
+        true_x = wine.data
+        true_y = wine.target
+        clf.fit(true_x, true_y)
         self.assertIsNotNone(clf.sk_model)
         self.assertTrue(clf.metrics["Training Accuracy"] > 0.0)
-
-    def test_predict(self):
-        pred_y = clf.predict(self.x)
-        self.assertTrue(accuracy_score(self.y, pred_y) > 0.97)
+        pred_y = clf.predict(true_x)
+        self.assertTrue(accuracy_score(true_y, pred_y) > 0.95)
 
 
 if __name__ == "__main__":
