@@ -82,5 +82,5 @@ function build_and_release {
 }
 
 function run_tests {
-    python -m unittest tests/classifiers/simple_classifier_tests.py -v
+    python -W -m unittest tests/classifiers/simple_classifier_tests.py -v
 }
