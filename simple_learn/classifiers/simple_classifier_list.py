@@ -106,4 +106,4 @@ class SimpleClassifierList:
         self.ranked_list.sort(reverse=True, key=metrik)
 
     def pop(self, index=0):
-        self.ranked_list.pop(index)
+        return self.ranked_list.pop(index)
