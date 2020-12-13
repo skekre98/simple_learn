@@ -19,3 +19,7 @@
 # SOFTWARE.
 
 from simple_learn.classifiers.simple_classifier import SimpleClassifier
+from simple_learn.classifiers.simple_classifier_list import (
+    SimpleClassifierList,
+    SimpleClassifierListObject,
+)

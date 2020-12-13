@@ -26,33 +26,52 @@ from sklearn.metrics import f1_score, jaccard_score
 from sklearn.model_selection import GridSearchCV
 from sklearn.utils import all_estimators
 
+from simple_learn.classifiers import SimpleClassifier
 from simple_learn.classifiers.param_grid import model_param_map
 
 
-class SimpleClassifier:
-    def __init__(self):
-        self.name = "Empty Model"
-        self.sk_model = None
-        self.attributes = dict()
-        self.metrics = dict()
-        self.gridsearch_duration = None
-        self.train_duration = None
+class SimpleClassifierListObject:
+    def __init__(self, clf, rank):
+        self.clf = clf
+        self.rank = rank
 
     def __str__(self):
 
-        for k in self.attributes:
-            if type(self.attributes[k]) == np.int64:
-                self.attributes[k] = int(self.attributes[k])
+        for k in self.clf.attributes:
+            if type(self.clf.attributes[k]) == np.int64:
+                self.clf.attributes[k] = int(self.clf.attributes[k])
 
         attr = {
-            "Type": self.name,
-            "Training Duration": "{}s".format(self.train_duration),
-            "GridSearch Duration": "{}s".format(self.gridsearch_duration),
-            "Parameters": self.attributes,
-            "Metrics": self.metrics,
+            "Type": self.clf.name,
+            "Rank": self.rank,
+            "Training Duration": "{}s".format(self.clf.train_duration),
+            "GridSearch Duration": "{}s".format(self.clf.gridsearch_duration),
+            "Parameters": self.clf.attributes,
+            "Metrics": self.clf.metrics,
+            "Index": self.rank - 1,
         }
 
         return json.dumps(attr, indent=4)
+
+
+class SimpleClassifierList:
+    def __init__(self, scoring="auto"):
+        self.ranked_list = []
+        metric_map = {
+            "auto": "Training Accuracy",
+            "jaccard": "Jaccard Score",
+            "f1": "F1 Score",
+        }
+        self.metric = metric_map[scoring]
+
+    def __str__(self):
+        r = 1
+        res = []
+        for clf in self.ranked_list:
+            obj = SimpleClassifierListObject(clf, r)
+            res.append(str(obj))
+            r += 1
+        return "\n".join(res)
 
     def fit(self, train_x, train_y, folds=3):
         estimators = all_estimators(type_filter="classifier")
@@ -70,20 +89,21 @@ class SimpleClassifier:
                 start = time.time()
                 grid_clf.fit(train_x, train_y)
                 end = time.time()
-                if grid_clf.best_score_ > self.metrics.get("Training Accuracy", 0.0):
-                    self.metrics["Training Accuracy"] = grid_clf.best_score_
-                    pred_y = grid_clf.predict(train_x)
-                    self.metrics["Jaccard Score"] = jaccard_score(
-                        train_y, pred_y, average="macro"
-                    )
-                    self.metrics["F1 Score"] = f1_score(
-                        train_y, pred_y, average="macro"
-                    )
-                    self.sk_model = grid_clf.best_estimator_
-                    self.name = name
-                    self.attributes = grid_clf.best_params_
-                    self.train_duration = grid_clf.refit_time_
-                    self.gridsearch_duration = end - start
+                clf = SimpleClassifier()
+                clf.metrics["Training Accuracy"] = grid_clf.best_score_
+                pred_y = grid_clf.predict(train_x)
+                clf.metrics["Jaccard Score"] = jaccard_score(
+                    train_y, pred_y, average="macro"
+                )
+                clf.metrics["F1 Score"] = f1_score(train_y, pred_y, average="macro")
+                clf.sk_model = grid_clf.best_estimator_
+                clf.name = name
+                clf.attributes = grid_clf.best_params_
+                clf.train_duration = grid_clf.refit_time_
+                clf.gridsearch_duration = end - start
+                self.ranked_list.append(clf)
+        metrik = lambda clf: clf.metrics[self.metric]
+        self.ranked_list.sort(reverse=True, key=metrik)
 
-    def predict(self, pred_x):
-        return self.sk_model.predict(pred_x)
+    def pop(self, index=0):
+        return self.ranked_list.pop(index)
