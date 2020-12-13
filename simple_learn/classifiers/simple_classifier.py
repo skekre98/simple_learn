@@ -19,10 +19,7 @@
 # SOFTWARE.
 
 import json
-import logging
-
-logger = logging.getLogger()
-logger.disabled = True
+import time
 
 import numpy as np
 from sklearn.metrics import f1_score, jaccard_score
@@ -39,6 +36,8 @@ class SimpleClassifier:
         self.sk_model = None
         self.attributes = dict()
         self.metrics = dict()
+        self.gridsearch_duration = None
+        self.train_duration = None
 
     def __str__(self):
 
@@ -48,6 +47,8 @@ class SimpleClassifier:
 
         attr = {
             "Type": self.name,
+            "Training Duration": "{}s".format(self.train_duration),
+            "GridSearch Duration": "{}s".format(self.gridsearch_duration),
             "Parameters": self.attributes,
             "Metrics": self.metrics,
         }
@@ -67,7 +68,9 @@ class SimpleClassifier:
                     verbose=0,
                     n_jobs=-1,
                 )
+                start = time.time()
                 grid_clf.fit(train_x, train_y)
+                end = time.time()
                 if grid_clf.best_score_ > self.metrics.get("Training Accuracy", 0.0):
                     self.metrics["Training Accuracy"] = grid_clf.best_score_
                     pred_y = grid_clf.predict(train_x)
@@ -80,6 +83,8 @@ class SimpleClassifier:
                     self.sk_model = grid_clf.best_estimator_
                     self.name = name
                     self.attributes = grid_clf.best_params_
+                    self.train_duration = grid_clf.refit_time_
+                    self.gridsearch_duration = end - start
 
     def predict(self, pred_x):
         return self.sk_model.predict(pred_x)
