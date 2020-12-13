@@ -22,27 +22,31 @@ import unittest
 
 from sklearn import datasets
 from sklearn.exceptions import ConvergenceWarning, FitFailedWarning
+from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
 
 from simple_learn.classifiers import SimpleClassifier
 
 
 class TestSimpleClassifier(unittest.TestCase):
+    def __init__(self):
+        wine = datasets.load_wine()
+        self.x = wine.data
+        self.y = wine.target
+        self.clf = SimpleClassifier()
+
     def test_init(self):
-        clf = SimpleClassifier()
         self.assertEqual(clf.name, "Empty Model")
         self.assertEqual(clf.training_accuracy, 0.0)
 
     def test_fit(self):
-        dataset = datasets.load_wine()
-        X = dataset.data
-        y = dataset.target
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25)
-
-        clf = SimpleClassifier()
-        clf.fit(X_train, y_train)
+        clf.fit(self.x, self.y)
         self.assertIsNotNone(clf.sk_model)
-        self.assertTrue(clf.training_accuracy > 0.0)
+        self.assertTrue(clf.metrics["Training Accuracy"] > 0.0)
+
+    def test_predict(self):
+        pred_y = clf.predict(self.x)
+        self.assertTrue(accuracy_score(self.y, pred_y) > 0.97)
 
 
 if __name__ == "__main__":
