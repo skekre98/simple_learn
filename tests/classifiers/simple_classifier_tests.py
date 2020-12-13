@@ -32,7 +32,6 @@ class TestSimpleClassifier(unittest.TestCase):
     def test_init(self):
         clf = SimpleClassifier()
         self.assertEqual(clf.name, "Empty Model")
-        self.assertEqual(clf.training_accuracy, 0.0)
 
     def test_wine(self):
         wine = datasets.load_wine()
