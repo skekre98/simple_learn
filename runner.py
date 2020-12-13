@@ -22,7 +22,7 @@
 from sklearn.datasets import load_iris
 
 # pip package
-from simple_learn.classifiers import SimpleClassifier
+from simple_learn.classifiers import SimpleClassifier, SimpleClassifierList
 
 
 class SimpleRunner:
@@ -33,13 +33,21 @@ class SimpleRunner:
 
     def run(self):
         # print SimpleClassifier created by iris dataset
-        print("Creating classification model...")
+        print("\nCreating classification model...")
         self.simple_classifier()
+
+        print("\nCreating classification rankings...")
+        self.simple_classifier_list()
 
     def simple_classifier(self):
         clf = SimpleClassifier()
         clf.fit(self.x, self.y)
         print(clf)
+
+    def simple_classifier_list(self):
+        clf_list = SimpleClassifierList()
+        clf_list.fit(self.x, self.y)
+        print(clf_list)
 
 
 def main():

@@ -30,6 +30,29 @@ from simple_learn.classifiers import SimpleClassifier
 from simple_learn.classifiers.param_grid import model_param_map
 
 
+class SimpleClassifierListObject:
+    def __init__(self, clf, rank):
+        self.clf = clf
+        self.rank = rank
+
+    def __str__(self):
+
+        for k in self.clf.attributes:
+            if type(self.clf.attributes[k]) == np.int64:
+                self.clf.attributes[k] = int(self.clf.attributes[k])
+
+        attr = {
+            "Type": self.clf.name,
+            "Rank": self.rank,
+            "Training Duration": "{}s".format(self.clf.train_duration),
+            "GridSearch Duration": "{}s".format(self.clf.gridsearch_duration),
+            "Parameters": self.clf.attributes,
+            "Metrics": self.clf.metrics,
+        }
+
+        return json.dumps(attr, indent=4)
+
+
 class SimpleClassifierList:
     def __init__(self, scoring="auto"):
         self.ranked_list = []
@@ -39,6 +62,15 @@ class SimpleClassifierList:
             "f1": "F1 Score",
         }
         self.metric = metric_map[scoring]
+
+    def __str__(self):
+        r = 1
+        res = []
+        for clf in self.ranked_list:
+            obj = SimpleClassifierListObject(clf, r)
+            res.append(str(obj))
+            r += 1
+        return "\n".join(res)
 
     def fit(self, train_x, train_y, folds=3):
         estimators = all_estimators(type_filter="classifier")
@@ -70,4 +102,4 @@ class SimpleClassifierList:
                 clf.gridsearch_duration = end - start
                 self.ranked_list.append(clf)
         metrik = lambda clf: clf.metrics[self.metric]
-        self.ranked_list.sort(reversed=True, key=metrik)
+        self.ranked_list.sort(reverse=True, key=metrik)
