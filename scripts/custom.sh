@@ -36,6 +36,12 @@ function build_package {
     python setup.py sdist bdist_wheel
 }
 
+function trial_script {
+    pip install -e ."[devel]"
+    python runner.py
+    pip uninstall -y simple_learn
+}
+
 function github_release {
     version=$(grep version simple_learn/version.py | awk -F'"' '{print $2}')
     git add .
@@ -76,5 +82,5 @@ function build_and_release {
 }
 
 function run_tests {
-    python -W ignore -m unittest tests/classifiers/simple_classifier_tests.py -v
+    python -m unittest tests/classifiers/simple_classifier_tests.py -v
 }
