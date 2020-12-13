@@ -34,13 +34,29 @@ class TestSimpleClassifier(unittest.TestCase):
         self.assertEqual(clf.name, "Empty Model")
         self.assertEqual(clf.training_accuracy, 0.0)
 
-    def test_fit_and_predict(self):
+    def test_wine(self):
         wine = datasets.load_wine()
         true_x = wine.data
         true_y = wine.target
+
+        clf = SimpleClassifier()
         clf.fit(true_x, true_y)
         self.assertIsNotNone(clf.sk_model)
         self.assertTrue(clf.metrics["Training Accuracy"] > 0.0)
+
+        pred_y = clf.predict(true_x)
+        self.assertTrue(accuracy_score(true_y, pred_y) > 0.95)
+
+    def test_iris(self):
+        iris = datasets.load_iris()
+        true_x = iris.data
+        true_y = iris.target
+
+        clf = SimpleClassifier()
+        clf.fit(true_x, true_y)
+        self.assertIsNotNone(clf.sk_model)
+        self.assertTrue(clf.metrics["Training Accuracy"] > 0.0)
+
         pred_y = clf.predict(true_x)
         self.assertTrue(accuracy_score(true_y, pred_y) > 0.95)
 
