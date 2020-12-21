@@ -22,7 +22,7 @@ import setuptools
 
 from simple_learn.version import version
 
-with open("README.md", "r") as fh:
+with open("simple_learn/README.md", "r") as fh:
     long_description = fh.read()
 
 requirements = ["numpy", "scikit-learn>=0.23.1"]
