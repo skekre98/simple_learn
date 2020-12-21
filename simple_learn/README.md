@@ -1,11 +1,11 @@
 # SimpleLearn
 
-A python package to simplify or automate data science workflows.
+A python package to simplify and automate data science workflows such as data modelling.
 
 ## Installation
 
 ```
-pip install simple-learn
+$ pip install simple-learn
 ```
 
 ## Primer
