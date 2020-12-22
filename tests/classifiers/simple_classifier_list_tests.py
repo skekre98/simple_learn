@@ -49,7 +49,7 @@ class TestSimpleClassifierList(unittest.TestCase):
         self.assertTrue(accuracy_score(true_y, pred1_y) > 0.90)
 
     def test_iris(self):
-        iris = datasets.load_wine()
+        iris = datasets.load_iris()
         true_x = iris.data
         true_y = iris.target
 
