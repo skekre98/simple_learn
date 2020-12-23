@@ -1,6 +1,6 @@
-<p align="center">
-     <img src="/img/logo.png" width="450" height="300">
-</p> 
+# SimpleLearn
+
+A python package to simplify data modeling.
 
 ## Build Locally
 
