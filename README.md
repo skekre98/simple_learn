@@ -1,5 +1,5 @@
 <p align="center">
-     <img src="/img/logo.png" width="800" height="650">
+     <img src="/img/logo.png" width="800" height="400">
 </p> 
 
 ## Build Locally
