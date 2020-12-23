@@ -1,6 +1,6 @@
-# SimpleLearn
-
-A python package to simplify data modeling.
+<div align="center">
+  <img src="/img/logo.png">
+</div>
 
 ## Build Locally
 
