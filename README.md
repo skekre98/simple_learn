@@ -4,6 +4,40 @@
 
 [SimpleLearn](https://pypi.org/project/simple-learn/) is a python package that aims to create an automatic process of model algorithm selection, hyper parameter tuning, iterative modelling, and model assessment. This package is built on top of [sklearn](https://scikit-learn.org/) and leaves all the flexibility and API support available to you. Keep in mind this package does NOT automate the entire process of data science and assumes you are handling tasks such as data preparation and feature engineering. A strong model algorithm cannot apologize for bad data.
 
+## Install
+
+To install the current release of SimpleLearn:
+```
+$ pip install simple-learn
+```
+To update SimpleLearn to the latest version, add `--upgrade` flag to the above command.
+
+#### *Try your first SimpleLearn program*
+```python
+>>> from sklearn.datasets import load_iris
+>>> from simple_learn.classifiers import SimpleClassifier
+>>>
+>>> iris = load_iris()
+>>> clf = SimpleClassifier()
+>>> clf.fit(iris.data, iris.target)
+>>> clf
+{
+    "Type": "KNeighborsClassifier",
+    "Training Duration": "0.0006814002990722656s",
+    "GridSearch Duration": "0.17136621475219727s",
+    "Parameters": {
+        "metric": "euclidean",
+        "n_neighbors": 4,
+        "weights": "uniform"
+    },
+    "Metrics": {
+        "Training Accuracy": 0.9866666666666667,
+        "Jaccard Score": 0.9245283018867925,
+        "F1 Score": 0.96
+    }
+}
+```
+
 ## Build Locally
 
 You can build your most recent changes by running the following command from the root directory:
