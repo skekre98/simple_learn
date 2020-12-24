@@ -26,6 +26,7 @@ warnings.filterwarnings("ignore")
 from sklearn import datasets
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
+from sklearn.feature_extraction.text import TfidfVectorizer
 
 from simple_learn.classifiers import SimpleClassifierList
 
@@ -72,6 +73,23 @@ class TestSimpleClassifierList(unittest.TestCase):
 
         clf_list = SimpleClassifierList()
         clf_list.fit(true_x,true_y)
+        self.assertTrue(len(clf_list.ranked_list) > 0)
+
+        clf1 = clf_list.pop(1)
+        clf0 = clf_list.pop()
+
+        pred1_y = clf1.predict(true_x)
+        pred0_y = clf0.predict(true_x)
+        self.assertTrue(accuracy_score(true_y, pred0_y) > 0.95)
+        self.assertTrue(accuracy_score(true_y, pred1_y) > 0.90)
+
+    def test_breast_cancer(self):
+        breast_cancer_data = datasets.load_breast_cancer()
+        true_x = breast_cancer_data.data
+        true_y = breast_cancer_data.target
+
+        clf_list = SimpleClassifierList()
+        clf_list.fit(true_x, true_y)
         self.assertTrue(len(clf_list.ranked_list) > 0)
 
         clf1 = clf_list.pop(1)
