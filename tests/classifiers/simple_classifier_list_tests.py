@@ -24,9 +24,9 @@ import warnings
 warnings.filterwarnings("ignore")
 
 from sklearn import datasets
+from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
-from sklearn.feature_extraction.text import TfidfVectorizer
 
 from simple_learn.classifiers import SimpleClassifierList
 
@@ -72,7 +72,7 @@ class TestSimpleClassifierList(unittest.TestCase):
         true_y = digits.target
 
         clf_list = SimpleClassifierList()
-        clf_list.fit(true_x,true_y)
+        clf_list.fit(true_x, true_y)
         self.assertTrue(len(clf_list.ranked_list) > 0)
 
         clf1 = clf_list.pop(1)
