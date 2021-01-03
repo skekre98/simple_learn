@@ -24,6 +24,7 @@ import warnings
 warnings.filterwarnings("ignore")
 
 from sklearn import datasets
+from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
 
@@ -52,6 +53,32 @@ class TestSimpleClassifier(unittest.TestCase):
         iris = datasets.load_iris()
         true_x = iris.data
         true_y = iris.target
+
+        clf = SimpleClassifier()
+        clf.fit(true_x, true_y)
+        self.assertIsNotNone(clf.sk_model)
+        self.assertTrue(clf.metrics["Training Accuracy"] > 0.0)
+
+        pred_y = clf.predict(true_x)
+        self.assertTrue(accuracy_score(true_y, pred_y) > 0.95)
+
+    def test_digits(self):
+        digits = datasets.load_digits()
+        true_x = digits.data
+        true_y = digits.target
+
+        clf = SimpleClassifier()
+        clf.fit(true_x, true_y)
+        self.assertIsNotNone(clf.sk_model)
+        self.assertTrue(clf.metrics["Training Accuracy"] > 0.0)
+
+        pred_y = clf.predict(true_x)
+        self.assertTrue(accuracy_score(true_y, pred_y) > 0.95)
+
+    def test_breast_cancer(self):
+        breast_cancer_data = datasets.load_breast_cancer()
+        true_x = breast_cancer_data.data
+        true_y = breast_cancer_data.target
 
         clf = SimpleClassifier()
         clf.fit(true_x, true_y)
