@@ -1,6 +1,6 @@
 <p align="center">
     <img src="/img/logo.png">
-</p> 
+</p>
 
 [![Python](https://img.shields.io/pypi/pyversions/simple-learn.svg?style=plastic)](https://badge.fury.io/py/simple-learn)
 [![PyPI version shields.io](https://img.shields.io/pypi/v/simple-learn.svg?kill_cache=1)](https://pypi.python.org/pypi/simple-learn/)
