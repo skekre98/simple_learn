@@ -18,6 +18,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-name = "simple_learn"
-author = "Sharvil Kekre"
-email = "sharvildev@gmail.com"
+from simple_learn.version import version as current_version
+
+__name__ = "simple_learn"
+__version__ = current_version
