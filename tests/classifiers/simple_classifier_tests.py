@@ -35,6 +35,7 @@ class TestSimpleClassifier(unittest.TestCase):
     """
     Tests for the SimpleClassifier Class
     """
+
     def test_init(self):
         """
         Test initialization of SimpleClassifier
