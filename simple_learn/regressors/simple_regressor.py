@@ -82,11 +82,11 @@ class SimpleRegressor:
                 ) is None or -grid_clf.best_score_ < self.metrics.get("Training Score"):
                     self.metrics["Training Score"] = -grid_clf.best_score_
                     pred_y = grid_clf.predict(train_x)
-                    self.metrics["mae"] = mean_absolute_error(train_y, pred_y)
-                    self.metrics["rmse"] = mean_squared_error(
-                        train_y, pred_y, squared=False
+                    self.metrics["Mean Absolute Error"] = mean_absolute_error(train_y, pred_y)
+                    self.metrics["Mean Square Error"] = mean_squared_error(
+                        train_y, pred_y
                     )
-                    self.metrics["r2"] = r2_score(train_y, pred_y)
+                    self.metrics["R-Squared"] = r2_score(train_y, pred_y)
                     self.sk_model = grid_clf.best_estimator_
                     self.name = name
                     self.attributes = grid_clf.best_params_
