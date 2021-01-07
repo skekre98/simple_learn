@@ -20,6 +20,7 @@
 
 import json
 import time
+import logging
 
 import numpy as np
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
@@ -30,6 +31,31 @@ from simple_learn.regressors.param_grid import model_param_map
 
 
 class SimpleRegressor:
+    """
+        A class used to simplify the creation of regression models
+        ...
+        Attributes
+        ----------
+        name : str
+            the optimal model algorithm for given dataset
+        sk_learn : str
+            the sklearn model used for prediction
+        attributes : dict
+            a dictionary used to keep track of model hyper-parameters
+        metrics : dict
+            a dictionary to keep track of scoring metrics
+        gridsearch_duration : time.time
+            the duration of the gridsearch being used in hyper-parameter tuning
+        train_duration : time.time
+            the duration of model training
+        Methods
+        -------
+        fit(train_x, train_y, folds=3)
+            Fits a given dataset onto SimpleRegressor
+        predict(pred_x)
+            Predicts label of samples in prediction array
+        """
+
     def __init__(self):
         self.name = "Empty Model"
         self.sk_model = None
@@ -38,6 +64,7 @@ class SimpleRegressor:
         self.gridsearch_duration = None
         self.train_duration = None
         self.failed_models = []
+        self.logger=logging.getLogger()
 
     def __str__(self):
 
@@ -56,6 +83,20 @@ class SimpleRegressor:
         return json.dumps(attr, indent=4)
 
     def fit(self, train_x, train_y, folds=3):
+        """Trains the optimal regression model
+                 on given dataset by running model algorithm search.
+                 If the argument folds isn't passed, the default
+                 value(3) is used.
+                 Parameters
+                 ----------
+                 train_x : numpy.ndarray
+                     The features for training classification model
+                 train_y : numpy.ndarray
+                     The corresponding label for feature array
+                 folds : int, optional
+                     The number of folds for cross validation
+                 """
+
         estimators = all_estimators(type_filter="regressor")
         for name, RegressionClass in estimators:
             if name in model_param_map:
@@ -65,16 +106,16 @@ class SimpleRegressor:
                     param_grid,
                     cv=folds,
                     scoring="neg_root_mean_squared_error",
-                    verbose=0,
+                    verbose=1,
                     n_jobs=-1,
                     error_score="raise",
                 )
                 start = time.time()
                 try:
                     grid_clf.fit(train_x, train_y)
-                except ValueError as e:
+                except ValueError as value_error:
                     self.failed_models.append(name)
-                    print("Model: {}, Error : {} ,".format(name, e))
+                    self.logger.warning(f'{name} failed, Error : {value_error}')
                     continue
                 end = time.time()
                 if self.metrics.get(
@@ -94,4 +135,11 @@ class SimpleRegressor:
                     self.gridsearch_duration = end - start
 
     def predict(self, pred_x):
+        """Predicts class label based on input
+                feature array
+                Parameters
+                ----------
+                pred_x : numpy.ndarray
+                    The feature array for predicting class labels
+                """
         return self.sk_model.predict(pred_x)
