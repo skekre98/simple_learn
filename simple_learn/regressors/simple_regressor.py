@@ -106,7 +106,7 @@ class SimpleRegressor:
                     param_grid,
                     cv=folds,
                     scoring="neg_root_mean_squared_error",
-                    verbose=1,
+                    verbose=0,
                     n_jobs=-1,
                     error_score="raise",
                 )
