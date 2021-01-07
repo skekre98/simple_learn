@@ -79,7 +79,7 @@ class SimpleClassifierList:
     ----------
     ranked_list : list
         the ranked list of SimpleClassifiers
-    metric : str
+    metric : str {auto, jaccard, f1}
         the scoring metric for ranking models
 
     Methods
