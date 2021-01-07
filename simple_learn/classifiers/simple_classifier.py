@@ -30,6 +30,35 @@ from simple_learn.classifiers.param_grid import model_param_map
 
 
 class SimpleClassifier:
+    """
+    A class used to simplify the creation of classification models
+
+    ...
+
+    Attributes
+    ----------
+    name : str
+        the optimal model algorithm for given dataset
+    sk_learn : str
+        the sklearn model used for prediction
+    attributes : dict
+        a dictionary used to keep track of model hyper-parameters
+    attributes : dict
+        a dictionary used to keep track of model hyper-parameters
+    metrics : dict
+        a dictionary to keep track of scoring metrics
+    gridsearch_duration : time.time
+        the duration of the gridsearch being used in hyper-parameter tuning
+    train_duration : time.time
+        the duration of model training
+
+    Methods
+    -------
+    fit(train_x, train_y, folds=3)
+        Fits a given dataset onto SimpleClassifier
+    predict(pred_x)
+        Predicts label of samples in prediction array
+    """
     def __init__(self):
         self.name = "Empty Model"
         self.sk_model = None
@@ -55,6 +84,22 @@ class SimpleClassifier:
         return json.dumps(attr, indent=4)
 
     def fit(self, train_x, train_y, folds=3):
+        """Trains the optimal classification model
+        on given dataset by running model algorithm search.
+
+        If the argument folds isn't passed, the default
+        value(3) is used.
+
+        Parameters
+        ----------
+        train_x : numpy.ndarray
+            The features for training classification model
+        train_y : numpy.ndarray
+            The corresponding label for feature array
+        folds : int, optional
+            The number of folds for cross validation
+        """
+
         estimators = all_estimators(type_filter="classifier")
         for name, ClassifierClass in estimators:
             if name in model_param_map:
@@ -86,4 +131,13 @@ class SimpleClassifier:
                     self.gridsearch_duration = end - start
 
     def predict(self, pred_x):
+        """Predicts class label based on input
+        feature array
+
+        Parameters
+        ----------
+        pred_x : numpy.ndarray
+            The feature array for predicting class labels
+        """
+
         return self.sk_model.predict(pred_x)
