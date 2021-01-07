@@ -24,6 +24,7 @@ import warnings
 warnings.filterwarnings("ignore")
 
 from sklearn import datasets
+from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
 
@@ -31,11 +32,31 @@ from simple_learn.classifiers import SimpleClassifier
 
 
 class TestSimpleClassifier(unittest.TestCase):
+    """
+    Tests for the SimpleClassifier Class
+    """
+
     def test_init(self):
+        """
+        Test initialization of SimpleClassifier
+
+        Expected
+        -----------------
+        name : "Empty Model"
+        """
         clf = SimpleClassifier()
         self.assertEqual(clf.name, "Empty Model")
 
     def test_wine(self):
+        """
+        Test SimpleClassifier against sklearn wine dataset
+
+        Expected
+        -----------------
+        model : Not None
+        training accuracy : > 0.95
+        accuracy score : > 0.95
+        """
         wine = datasets.load_wine()
         true_x = wine.data
         true_y = wine.target
@@ -43,12 +64,21 @@ class TestSimpleClassifier(unittest.TestCase):
         clf = SimpleClassifier()
         clf.fit(true_x, true_y)
         self.assertIsNotNone(clf.sk_model)
-        self.assertTrue(clf.metrics["Training Accuracy"] > 0.0)
+        self.assertTrue(clf.metrics["Training Accuracy"] > 0.95)
 
         pred_y = clf.predict(true_x)
         self.assertTrue(accuracy_score(true_y, pred_y) > 0.95)
 
     def test_iris(self):
+        """
+        Test SimpleClassifier against sklearn iris dataset
+
+        Expected
+        -----------------
+        model : Not None
+        training accuracy : > 0.95
+        accuracy score : > 0.95
+        """
         iris = datasets.load_iris()
         true_x = iris.data
         true_y = iris.target
@@ -56,7 +86,51 @@ class TestSimpleClassifier(unittest.TestCase):
         clf = SimpleClassifier()
         clf.fit(true_x, true_y)
         self.assertIsNotNone(clf.sk_model)
-        self.assertTrue(clf.metrics["Training Accuracy"] > 0.0)
+        self.assertTrue(clf.metrics["Training Accuracy"] > 0.95)
+
+        pred_y = clf.predict(true_x)
+        self.assertTrue(accuracy_score(true_y, pred_y) > 0.95)
+
+    def test_digits(self):
+        """
+        Test SimpleClassifier against sklearn digits dataset
+
+        Expected
+        -----------------
+        model : Not None
+        training accuracy : > 0.95
+        accuracy score : > 0.95
+        """
+        digits = datasets.load_digits()
+        true_x = digits.data
+        true_y = digits.target
+
+        clf = SimpleClassifier()
+        clf.fit(true_x, true_y)
+        self.assertIsNotNone(clf.sk_model)
+        self.assertTrue(clf.metrics["Training Accuracy"] > 0.95)
+
+        pred_y = clf.predict(true_x)
+        self.assertTrue(accuracy_score(true_y, pred_y) > 0.95)
+
+    def test_breast_cancer(self):
+        """
+        Test SimpleClassifier against sklearn breast cancer dataset
+
+        Expected
+        -----------------
+        model : Not None
+        training accuracy : > 0.95
+        accuracy score : > 0.95
+        """
+        breast_cancer_data = datasets.load_breast_cancer()
+        true_x = breast_cancer_data.data
+        true_y = breast_cancer_data.target
+
+        clf = SimpleClassifier()
+        clf.fit(true_x, true_y)
+        self.assertIsNotNone(clf.sk_model)
+        self.assertTrue(clf.metrics["Training Accuracy"] > 0.95)
 
         pred_y = clf.predict(true_x)
         self.assertTrue(accuracy_score(true_y, pred_y) > 0.95)
