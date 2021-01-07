@@ -59,6 +59,7 @@ class SimpleClassifier:
     predict(pred_x)
         Predicts label of samples in prediction array
     """
+
     def __init__(self):
         self.name = "Empty Model"
         self.sk_model = None

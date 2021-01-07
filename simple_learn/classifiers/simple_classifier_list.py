@@ -31,6 +31,20 @@ from simple_learn.classifiers.param_grid import model_param_map
 
 
 class SimpleClassifierListObject:
+    """
+    A class used to keep track SimpleClassifiers and
+    corresponding rank for terminal display
+
+    ...
+
+    Attributes
+    ----------
+    clf : simple_learn.classifiers.SimpleClassifier
+        the SimpleClassifier object
+    rank : int
+        the associated rank for classifier
+    """
+
     def __init__(self, clf, rank):
         self.clf = clf
         self.rank = rank
@@ -55,6 +69,29 @@ class SimpleClassifierListObject:
 
 
 class SimpleClassifierList:
+    """
+    A class used to maintain ranked list of
+    SimpleClassifiers
+
+    ...
+
+    Attributes
+    ----------
+    ranked_list : list
+        the ranked list of SimpleClassifiers
+    metric : str
+        the scoring metric for ranking models
+
+    Methods
+    -------
+    fit(train_x, train_y, folds=3)
+        Fits a given dataset onto SimpleClassifier and
+        creates a ranked list based on scores
+    pop(index=0)
+        Removes a SimpleClassifier at a specific index
+        for usage
+    """
+
     def __init__(self, scoring="auto"):
         self.ranked_list = []
         metric_map = {
@@ -74,6 +111,22 @@ class SimpleClassifierList:
         return "\n".join(res)
 
     def fit(self, train_x, train_y, folds=3):
+        """Trains all classification models from
+        parameter grid by running model algorithm search.
+
+        Creates a ranked list of models based on selected
+        scoring metric.
+
+        Parameters
+        ----------
+        train_x : numpy.ndarray
+            The features for training classification model
+        train_y : numpy.ndarray
+            The corresponding label for feature array
+        folds : int, optional
+            The number of folds for cross validation
+        """
+
         estimators = all_estimators(type_filter="classifier")
         for name, ClassifierClass in estimators:
             if name in model_param_map:
@@ -106,4 +159,14 @@ class SimpleClassifierList:
         self.ranked_list.sort(reverse=True, key=metrik)
 
     def pop(self, index=0):
+        """Removes SimpleClassifier from a specific
+        index in ranked list.
+
+        Parameters
+        ----------
+        index : int
+            The index corresponding to the SimpleClassifier
+            being removed from ranked list
+        """
+
         return self.ranked_list.pop(index)
