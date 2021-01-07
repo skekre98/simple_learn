@@ -26,6 +26,7 @@ function install_dependencies {
     python -m pip install tqdm
     python -m pip install twine
     python -m pip install sklearn
+    python -m pip install -r requirements.txt
 }
 
 function setup_env {
