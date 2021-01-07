@@ -54,7 +54,7 @@ class TestSimpleClassifier(unittest.TestCase):
         Expected
         -----------------
         model : Not None
-        training accuracy : > 0.0
+        training accuracy : > 0.95
         accuracy score : > 0.95
         """
         wine = datasets.load_wine()
@@ -64,7 +64,7 @@ class TestSimpleClassifier(unittest.TestCase):
         clf = SimpleClassifier()
         clf.fit(true_x, true_y)
         self.assertIsNotNone(clf.sk_model)
-        self.assertTrue(clf.metrics["Training Accuracy"] > 0.0)
+        self.assertTrue(clf.metrics["Training Accuracy"] > 0.95)
 
         pred_y = clf.predict(true_x)
         self.assertTrue(accuracy_score(true_y, pred_y) > 0.95)
@@ -76,7 +76,7 @@ class TestSimpleClassifier(unittest.TestCase):
         Expected
         -----------------
         model : Not None
-        training accuracy : > 0.0
+        training accuracy : > 0.95
         accuracy score : > 0.95
         """
         iris = datasets.load_iris()
@@ -86,7 +86,7 @@ class TestSimpleClassifier(unittest.TestCase):
         clf = SimpleClassifier()
         clf.fit(true_x, true_y)
         self.assertIsNotNone(clf.sk_model)
-        self.assertTrue(clf.metrics["Training Accuracy"] > 0.0)
+        self.assertTrue(clf.metrics["Training Accuracy"] > 0.95)
 
         pred_y = clf.predict(true_x)
         self.assertTrue(accuracy_score(true_y, pred_y) > 0.95)
@@ -98,7 +98,7 @@ class TestSimpleClassifier(unittest.TestCase):
         Expected
         -----------------
         model : Not None
-        training accuracy : > 0.0
+        training accuracy : > 0.95
         accuracy score : > 0.95
         """
         digits = datasets.load_digits()
@@ -108,7 +108,7 @@ class TestSimpleClassifier(unittest.TestCase):
         clf = SimpleClassifier()
         clf.fit(true_x, true_y)
         self.assertIsNotNone(clf.sk_model)
-        self.assertTrue(clf.metrics["Training Accuracy"] > 0.0)
+        self.assertTrue(clf.metrics["Training Accuracy"] > 0.95)
 
         pred_y = clf.predict(true_x)
         self.assertTrue(accuracy_score(true_y, pred_y) > 0.95)
@@ -120,7 +120,7 @@ class TestSimpleClassifier(unittest.TestCase):
         Expected
         -----------------
         model : Not None
-        training accuracy : > 0.0
+        training accuracy : > 0.95
         accuracy score : > 0.95
         """
         breast_cancer_data = datasets.load_breast_cancer()
@@ -130,7 +130,7 @@ class TestSimpleClassifier(unittest.TestCase):
         clf = SimpleClassifier()
         clf.fit(true_x, true_y)
         self.assertIsNotNone(clf.sk_model)
-        self.assertTrue(clf.metrics["Training Accuracy"] > 0.0)
+        self.assertTrue(clf.metrics["Training Accuracy"] > 0.95)
 
         pred_y = clf.predict(true_x)
         self.assertTrue(accuracy_score(true_y, pred_y) > 0.95)
