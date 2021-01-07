@@ -32,6 +32,7 @@ model_param_map = {
         "alpha": [0.0001, 0.001],
         "learning_rate": ["constant", "optimal", "invscaling", "adaptive"],
         "eta0": [0.01, 0.025, 0.05, 0.075, 0.1, 0.15, 0.2],
+        "max_iter" : [10000]
     },
     "KNeighborsRegressor": {
         "n_neighbors": np.arange(3, 15),
