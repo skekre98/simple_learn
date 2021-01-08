@@ -19,7 +19,7 @@
 # SOFTWARE.
 
 from simple_learn.version import version as current_version
-from simple_learn import classifiers
+import simple_learn.classifiers
 
 __name__ = "simple_learn"
 __version__ = current_version
