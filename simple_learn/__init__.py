@@ -18,12 +18,13 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from simple_learn.classifiers.simple_classifier import SimpleClassifier
-from simple_learn.classifiers.simple_classifier_list import (
+from simple_learn.version import version as current_version
+
+from .classifiers.simple_classifier import SimpleClassifier
+from .classifiers.simple_classifier_list import (
     SimpleClassifierList,
     SimpleClassifierListObject,
 )
-from simple_learn.version import version as current_version
 
 __name__ = "simple_learn"
 __version__ = current_version
