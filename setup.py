@@ -18,7 +18,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import setuptools
+from setuptools import find_packages, setup
 
 from simple_learn.version import version
 
@@ -27,7 +27,7 @@ with open("simple_learn/README.md", "r") as fh:
 
 requirements = ["numpy", "scikit-learn>=0.23.1"]
 
-setuptools.setup(
+setup(
     name="simple_learn",
     version=version,
     author="Sharvil Kekre",
@@ -37,7 +37,7 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/skekre98/simple_learn",
-    packages=["simple_learn"],
+    packages=find_packages(),
     install_requires=requirements,
     classifiers=[
         "Programming Language :: Python :: 3",

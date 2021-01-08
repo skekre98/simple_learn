@@ -20,6 +20,7 @@
 
 import numpy as np
 
+# Hyper-parameter search space for grid search
 model_param_map = {
     "BernoulliNB": {
         "alpha": 10.0 ** -np.arange(1, 7),
