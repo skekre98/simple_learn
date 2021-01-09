@@ -43,8 +43,6 @@ class SimpleClassifier:
         the sklearn model used for prediction
     attributes : dict
         a dictionary used to keep track of model hyper-parameters
-    attributes : dict
-        a dictionary used to keep track of model hyper-parameters
     metrics : dict
         a dictionary to keep track of scoring metrics
     gridsearch_duration : time.time
