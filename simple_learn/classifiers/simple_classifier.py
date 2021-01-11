@@ -21,6 +21,8 @@
 import json
 import time
 
+from  simple_learn.encoders import simple_model_encoder
+
 import numpy as np
 from sklearn.metrics import f1_score, jaccard_score
 from sklearn.model_selection import GridSearchCV
@@ -80,9 +82,23 @@ class SimpleClassifier:
             "Metrics": self.metrics,
         }
 
-        return json.dumps(attr, indent=4)
+        str_out = json.dumps(attr, cls=simple_model_encoder.npEncoder, indent=4)
+        return str_out
 
-    def fit(self, train_x, train_y, folds=3):
+    def __repr__(self):
+        
+        attr = {
+            "Type": self.name,
+            "Training Duration": "{}s".format(self.train_duration),
+            "GridSearch Duration": "{}s".format(self.gridsearch_duration),
+            "Parameters": self.attributes,
+            "Metrics": self.metrics,
+        }
+        
+        repr_out = json.dumps(attr, cls=simple_model_encoder.npEncoder, indent=4)
+        return repr_out
+
+    def fit(self, train_x, train_y, folds=3): 
         """Trains the optimal classification model
         on given dataset by running model algorithm search.
 
@@ -139,4 +155,4 @@ class SimpleClassifier:
             The feature array for predicting class labels
         """
 
-        return self.sk_model.predict(pred_x)
+        return self.sk_model.predict(pred_x) 
