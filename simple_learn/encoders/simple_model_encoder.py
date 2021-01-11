@@ -6,3 +6,4 @@ class npEncoder(json.JSONEncoder):
         if isinstance(obj, np.int32):
             return int(obj)
         return json.JSONEncoder.default(self, obj)
+        
