@@ -27,6 +27,7 @@ from sklearn.model_selection import GridSearchCV
 from sklearn.utils import all_estimators
 
 from simple_learn.classifiers.param_grid import model_param_map
+from simple_learn.encoders import simple_model_encoder
 
 
 class SimpleClassifier:
@@ -80,7 +81,21 @@ class SimpleClassifier:
             "Metrics": self.metrics,
         }
 
-        return json.dumps(attr, indent=4)
+        str_out = json.dumps(attr, cls=simple_model_encoder.npEncoder, indent=4)
+        return str_out
+
+    def __repr__(self):
+
+        attr = {
+            "Type": self.name,
+            "Training Duration": "{}s".format(self.train_duration),
+            "GridSearch Duration": "{}s".format(self.gridsearch_duration),
+            "Parameters": self.attributes,
+            "Metrics": self.metrics,
+        }
+
+        repr_out = json.dumps(attr, cls=simple_model_encoder.npEncoder, indent=4)
+        return repr_out
 
     def fit(self, train_x, train_y, folds=3):
         """Trains the optimal classification model
