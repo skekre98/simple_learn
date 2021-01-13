@@ -26,6 +26,7 @@ import numpy as np
 from scipy.stats import levene
 from sklearn import datasets
 from sklearn.datasets import make_regression
+
 from simple_learn.regressors import SimpleRegressor
 
 
@@ -38,9 +39,16 @@ class TestSimpleRegressor(unittest.TestCase):
         """
         testing warnings of failed models with negative data value in y
         """
-        true_x , true_y = [np.random.standard_normal(10),np.random.standard_normal(10),np.random.standard_normal(10)] , np.arange(-3,0)
+        true_x, true_y = (
+            [
+                np.random.standard_normal(10),
+                np.random.standard_normal(10),
+                np.random.standard_normal(10),
+            ],
+            np.arange(-3, 0),
+        )
         clf = SimpleRegressor()
-        with self.assertLogs(clf.logger, level='WARNING') as cm:
+        with self.assertLogs(clf.logger, level="WARNING") as cm:
             clf.fit(true_x, true_y)
             self.assertEqual(len(cm.output), len(clf.failed_models))
 
@@ -70,6 +78,7 @@ class TestSimpleRegressor(unittest.TestCase):
         pred_y = clf.predict(true_x)
         stat, p = levene(true_y, pred_y)
         self.assertTrue(p > 0.05)
+
 
 if __name__ == "__main__":
     unittest.main()

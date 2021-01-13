@@ -19,8 +19,8 @@
 # SOFTWARE.
 
 import json
-import time
 import logging
+import time
 
 import numpy as np
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
@@ -64,7 +64,7 @@ class SimpleRegressor:
         self.gridsearch_duration = None
         self.train_duration = None
         self.failed_models = []
-        self.logger=logging.getLogger()
+        self.logger = logging.getLogger()
 
     def __str__(self):
 
@@ -115,7 +115,7 @@ class SimpleRegressor:
                     grid_clf.fit(train_x, train_y)
                 except ValueError as value_error:
                     self.failed_models.append(name)
-                    self.logger.warning(f'{name} failed, Error : {value_error}')
+                    self.logger.warning(f"{name} failed, Error : {value_error}")
                     continue
                 end = time.time()
                 if self.metrics.get(
@@ -123,7 +123,9 @@ class SimpleRegressor:
                 ) is None or -grid_clf.best_score_ < self.metrics.get("Training Score"):
                     self.metrics["Training Score"] = -grid_clf.best_score_
                     pred_y = grid_clf.predict(train_x)
-                    self.metrics["Mean Absolute Error"] = mean_absolute_error(train_y, pred_y)
+                    self.metrics["Mean Absolute Error"] = mean_absolute_error(
+                        train_y, pred_y
+                    )
                     self.metrics["Mean Square Error"] = mean_squared_error(
                         train_y, pred_y
                     )
