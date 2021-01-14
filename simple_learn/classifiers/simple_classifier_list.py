@@ -84,6 +84,7 @@ class SimpleClassifierListObject:
         repr_out = json.dumps(attr, cls=simple_model_encoder.npEncoder, indent=4)
         return repr_out
 
+
 class SimpleClassifierList:
     """
     A class used to maintain ranked list of

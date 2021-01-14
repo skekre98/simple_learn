@@ -27,8 +27,9 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from sklearn.model_selection import GridSearchCV
 from sklearn.utils import all_estimators
 
-from simple_learn.regressors.param_grid import model_param_map
 from simple_learn.encoders import simple_model_encoder
+from simple_learn.regressors.param_grid import model_param_map
+
 
 class SimpleRegressor:
     """
