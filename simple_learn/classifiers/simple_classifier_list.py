@@ -28,6 +28,7 @@ from sklearn.utils import all_estimators
 
 from simple_learn.classifiers import SimpleClassifier
 from simple_learn.classifiers.param_grid import model_param_map
+from simple_learn.encoders import simple_model_encoder
 
 
 class SimpleClassifierListObject:
@@ -65,7 +66,23 @@ class SimpleClassifierListObject:
             "Index": self.rank - 1,
         }
 
-        return json.dumps(attr, indent=4)
+        str_out = json.dumps(attr, cls=simple_model_encoder.npEncoder, indent=4)
+        return str_out
+
+    def __repr__(self):
+
+        attr = {
+            "Type": self.clf.name,
+            "Rank": self.rank,
+            "Training Duration": "{}s".format(self.clf.train_duration),
+            "GridSearch Duration": "{}s".format(self.clf.gridsearch_duration),
+            "Parameters": self.clf.attributes,
+            "Metrics": self.clf.metrics,
+            "Index": self.rank - 1,
+        }
+
+        repr_out = json.dumps(attr, cls=simple_model_encoder.npEncoder, indent=4)
+        return repr_out
 
 
 class SimpleClassifierList:
@@ -108,7 +125,16 @@ class SimpleClassifierList:
             obj = SimpleClassifierListObject(clf, r)
             res.append(str(obj))
             r += 1
-        return "\n".join(res)
+        return "\n".join(res) if len(res) > 1 else "The List is Empty!"
+
+    def __repr__(self):
+        r = 1
+        res = []
+        for clf in self.ranked_list:
+            obj = SimpleClassifierListObject(clf, r)
+            res.append(str(obj))
+            r += 1
+        return "\n".join(res) if len(res) > 1 else "The List is Empty!"
 
     def fit(self, train_x, train_y, folds=3):
         """Trains all classification models from
