@@ -125,7 +125,16 @@ class SimpleClassifierList:
             obj = SimpleClassifierListObject(clf, r)
             res.append(str(obj))
             r += 1
-        return "\n".join(res)
+        return "\n".join(res) if len(res) > 1 else "The List is Empty!"
+
+    def __repr__(self):
+        r = 1
+        res = []
+        for clf in self.ranked_list:
+            obj = SimpleClassifierListObject(clf, r)
+            res.append(str(obj))
+            r += 1
+        return "\n".join(res) if len(res) > 1 else "The List is Empty!"
 
     def fit(self, train_x, train_y, folds=3):
         """Trains all classification models from
