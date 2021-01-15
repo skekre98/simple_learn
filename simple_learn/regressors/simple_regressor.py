@@ -128,9 +128,9 @@ class SimpleRegressor:
                 start = time.time()
                 try:
                     grid_clf.fit(train_x, train_y)
-                except ValueError as value_error:
+                except BaseException as error:
                     self.failed_models.append(name)
-                    self.logger.warning(f"{name} failed, Error : {value_error}")
+                    self.logger.warning(f"{name} failed due to, Error : {error} and another model was fitted.")
                     continue
                 end = time.time()
                 if self.metrics.get(
