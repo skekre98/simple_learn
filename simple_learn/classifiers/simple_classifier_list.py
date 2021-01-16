@@ -19,6 +19,7 @@
 # SOFTWARE.
 
 import json
+import logging
 import time
 
 import numpy as np
@@ -98,6 +99,8 @@ class SimpleClassifierList:
         the ranked list of SimpleClassifiers
     metric : str {auto, jaccard, f1}
         the scoring metric for ranking models
+    logger : logging.Logger
+        logger for notifying user of warnings
 
     Methods
     -------
@@ -166,7 +169,11 @@ class SimpleClassifierList:
                     n_jobs=-1,
                 )
                 start = time.time()
-                grid_clf.fit(train_x, train_y)
+                try:
+                    grid_clf.fit(train_x, train_y)
+                except BaseException as error:
+                    self.logger.warning(f"{name} failed due to, Error : {error}.")
+                    continue
                 end = time.time()
                 clf = SimpleClassifier()
                 clf.metrics["Training Accuracy"] = grid_clf.best_score_

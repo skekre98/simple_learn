@@ -52,6 +52,10 @@ class SimpleRegressor:
             the duration of the gridsearch being used in hyper-parameter tuning
         train_duration : time.time
             the duration of model training
+        failed_models : list
+            the list of failed model algorithms
+        logger : logging.Logger
+            logger for notifying user of warnings
         Methods
         -------
         fit(train_x, train_y, folds=3)

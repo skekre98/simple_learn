@@ -19,6 +19,7 @@
 # SOFTWARE.
 
 import json
+import logging
 import os
 import time
 import zipfile
@@ -53,7 +54,10 @@ class SimpleClassifier:
         the duration of the gridsearch being used in hyper-parameter tuning
     train_duration : time.time
         the duration of model training
-
+    failed_models : list
+        the list of failed model algorithms
+    logger : logging.Logger
+        logger for notifying user of warnings
     Methods
     -------
     fit(train_x, train_y, folds=3)
@@ -69,6 +73,8 @@ class SimpleClassifier:
         self.metrics = dict()
         self.gridsearch_duration = None
         self.train_duration = None
+        self.failed_models = []
+        self.logger = logging.getLogger()
 
     def __str__(self):
 
@@ -130,7 +136,12 @@ class SimpleClassifier:
                     n_jobs=-1,
                 )
                 start = time.time()
-                grid_clf.fit(train_x, train_y)
+                try:
+                    grid_clf.fit(train_x, train_y)
+                except BaseException as error:
+                    self.failed_models.append(name)
+                    self.logger.warning(f"{name} failed due to, Error : {error}.")
+                    continue
                 end = time.time()
                 if grid_clf.best_score_ > self.metrics.get("Training Accuracy", 0.0):
                     self.metrics["Training Accuracy"] = grid_clf.best_score_
