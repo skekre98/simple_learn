@@ -131,7 +131,7 @@ class SimpleRegressor:
                 except BaseException as error:
                     self.failed_models.append(name)
                     self.logger.warning(
-                        f"{name} failed due to, Error : {error} and another model was fitted."
+                        f"{name} failed due to, Error : {error}."
                     )
                     continue
                 end = time.time()
