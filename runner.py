@@ -19,10 +19,11 @@
 # SOFTWARE.
 
 # ML package
-from sklearn.datasets import load_iris
+from sklearn.datasets import load_iris, make_regression
 
 # pip package
 from simple_learn.classifiers import SimpleClassifier, SimpleClassifierList
+from simple_learn.regressors import SimpleRegressor
 
 
 class SimpleRunner:
@@ -30,6 +31,9 @@ class SimpleRunner:
         iris = load_iris()
         self.x = iris.data
         self.y = iris.target
+        self.reg_x, self.reg_y = make_regression(
+            n_features=4, n_informative=2, random_state=10, shuffle=False
+        )
 
     def run(self):
         # print SimpleClassifier created by iris dataset
@@ -39,15 +43,25 @@ class SimpleRunner:
         print("\nCreating classification rankings...")
         self.simple_classifier_list()
 
+        print("\nCreating regression model...")
+        self.simple_regressor()
+
     def simple_classifier(self):
         clf = SimpleClassifier()
         clf.fit(self.x, self.y)
         print(clf)
+        clf.save()
 
     def simple_classifier_list(self):
         clf_list = SimpleClassifierList()
         clf_list.fit(self.x, self.y)
         print(clf_list)
+
+    def simple_regressor(self):
+        rgr = SimpleRegressor()
+        rgr.fit(self.reg_x, self.reg_y)
+        print(rgr)
+        rgr.save()
 
 
 def main():

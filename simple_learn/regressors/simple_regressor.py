@@ -20,9 +20,12 @@
 
 import json
 import logging
+import os
 import time
+import zipfile
 
 import numpy as np
+from joblib import dump, load
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from sklearn.model_selection import GridSearchCV
 from sklearn.utils import all_estimators
@@ -130,9 +133,7 @@ class SimpleRegressor:
                     grid_clf.fit(train_x, train_y)
                 except BaseException as error:
                     self.failed_models.append(name)
-                    self.logger.warning(
-                        f"{name} failed due to, Error : {error}."
-                    )
+                    self.logger.warning(f"{name} failed due to, Error : {error}.")
                     continue
                 end = time.time()
                 if self.metrics.get(
@@ -162,3 +163,35 @@ class SimpleRegressor:
                     The feature array for predicting class labels
                 """
         return self.sk_model.predict(pred_x)
+
+    def save(self, name="simple_regressor"):
+        """Creates A zip archive file from SimpleRegressor
+        attributes and sklearn model
+
+        Parameters
+        ----------
+        name : str, optional
+            The name of the zip archive file to create
+        """
+
+        dump(self.sk_model, "simple_regressor.joblib")
+
+        clf_dict = dict()
+        clf_dict["Name"] = self.name
+        clf_dict["GridSearch Duration"] = self.gridsearch_duration
+        clf_dict["Training Duration"] = self.train_duration
+        clf_dict["Attributes"] = self.attributes
+        clf_dict["Metrics"] = self.metrics
+        with open("simple_regressor.json", "w") as fp:
+            json.dump(clf_dict, fp)
+
+        zip_name = "{n}.zip".format(n=name)
+        zf = zipfile.ZipFile(zip_name, mode="w")
+        try:
+            zf.write("simple_regressor.json")
+            zf.write("simple_regressor.joblib")
+        finally:
+            zf.close()
+
+        os.remove("simple_regressor.json")
+        os.remove("simple_regressor.joblib")
