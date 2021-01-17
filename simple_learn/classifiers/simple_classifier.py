@@ -18,10 +18,15 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import ast
 import json
+import logging
+import os
 import time
+import zipfile
 
 import numpy as np
+from joblib import dump, load
 from sklearn.metrics import f1_score, jaccard_score
 from sklearn.model_selection import GridSearchCV
 from sklearn.utils import all_estimators
@@ -50,13 +55,20 @@ class SimpleClassifier:
         the duration of the gridsearch being used in hyper-parameter tuning
     train_duration : time.time
         the duration of model training
-
+    failed_models : list
+        the list of failed model algorithms
+    logger : logging.Logger
+        logger for notifying user of warnings
     Methods
     -------
     fit(train_x, train_y, folds=3)
         Fits a given dataset onto SimpleClassifier
     predict(pred_x)
         Predicts label of samples in prediction array
+    save(self, name="simple_classifier")
+        Creates a zip archive of the SimpleClassifier object
+    load(self, simple_archive)
+        Loads data from zip archive into SimpleClassifier object
     """
 
     def __init__(self):
@@ -66,6 +78,8 @@ class SimpleClassifier:
         self.metrics = dict()
         self.gridsearch_duration = None
         self.train_duration = None
+        self.failed_models = []
+        self.logger = logging.getLogger()
 
     def __str__(self):
 
@@ -127,7 +141,12 @@ class SimpleClassifier:
                     n_jobs=-1,
                 )
                 start = time.time()
-                grid_clf.fit(train_x, train_y)
+                try:
+                    grid_clf.fit(train_x, train_y)
+                except BaseException as error:
+                    self.failed_models.append(name)
+                    self.logger.warning(f"{name} failed due to, Error : {error}.")
+                    continue
                 end = time.time()
                 if grid_clf.best_score_ > self.metrics.get("Training Accuracy", 0.0):
                     self.metrics["Training Accuracy"] = grid_clf.best_score_
@@ -155,3 +174,58 @@ class SimpleClassifier:
         """
 
         return self.sk_model.predict(pred_x)
+
+    def save(self, name="simple_classifier"):
+        """Creates a zip archive file from SimpleClassifier
+        attributes and sklearn model
+
+        Parameters
+        ----------
+        name : str, optional
+            The name of the zip archive file to create
+        """
+
+        dump(self.sk_model, "simple_classifier.joblib")
+
+        clf_str = str(self)
+        clf_dict = json.loads(clf_str)
+        with open("simple_classifier.json", "w") as fp:
+            json.dump(clf_dict, fp)
+
+        zip_name = "{n}.zip".format(n=name)
+        zf = zipfile.ZipFile(zip_name, mode="w")
+        try:
+            zf.write("simple_classifier.json")
+            zf.write("simple_classifier.joblib")
+        finally:
+            zf.close()
+
+        os.remove("simple_classifier.json")
+        os.remove("simple_classifier.joblib")
+
+    def load(self, simple_archive):
+        """Creates a SimpleClassifier object from a
+        zip archive file
+
+        Parameters
+        ----------
+        simple_archive : str
+            The path to the zip archive file
+        """
+
+        zf = zipfile.ZipFile(simple_archive)
+        try:
+            byte_str = zf.read("simple_classifier.json")
+            dict_str = byte_str.decode("UTF-8")
+            clf_dict = ast.literal_eval(dict_str)
+            self.name = clf_dict["Type"]
+            self.gridsearch_duration = clf_dict["GridSearch Duration"]
+            self.train_duration = clf_dict["Training Duration"]
+            self.attributes = clf_dict["Parameters"]
+            self.metrics = clf_dict["Metrics"]
+
+            clf_joblib = zf.extract("simple_classifier.joblib")
+            self.sk_model = load(clf_joblib)
+            os.remove("simple_classifier.joblib")
+        except KeyError:
+            self.logger.exception("Archive file was not in correct format")

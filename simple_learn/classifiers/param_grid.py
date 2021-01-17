@@ -47,7 +47,7 @@ model_param_map = {
         "min_samples_leaf": np.linspace(0.1, 0.5, 3),
         "max_depth": np.arange(3, 8),
         "max_features": ["log2", "sqrt"],
-        "criterion": ["friedman_mse", "mae"],
+        "criterion": ["friedman_mse", "mse"],
         "n_estimators": [10],
     },
     "HistGradientBoostingClassifier": {
