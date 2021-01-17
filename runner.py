@@ -18,6 +18,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import os
+
 # ML package
 from sklearn.datasets import load_iris, make_regression
 
@@ -49,8 +51,12 @@ class SimpleRunner:
     def simple_classifier(self):
         clf = SimpleClassifier()
         clf.fit(self.x, self.y)
-        print(clf)
         clf.save()
+        clf2 = SimpleClassifier()
+        clf2.load("simple_classifier.zip")
+        print("\nSuccessfully saved/loaded SimpleClassifier:\n", clf2)
+        print(clf2)
+        os.remove("simple_classifier.zip")
 
     def simple_classifier_list(self):
         clf_list = SimpleClassifierList()
@@ -60,8 +66,11 @@ class SimpleRunner:
     def simple_regressor(self):
         rgr = SimpleRegressor()
         rgr.fit(self.reg_x, self.reg_y)
-        print(rgr)
         rgr.save()
+        rgr2 = SimpleRegressor()
+        rgr2.load("simple_regressor.zip")
+        print("\nSuccessfully saved/loaded SimpleRegressor:\n", rgr2)
+        os.remove("simple_regressor.zip")
 
 
 def main():

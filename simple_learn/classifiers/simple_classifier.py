@@ -18,6 +18,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import ast
 import json
 import logging
 import os
@@ -64,6 +65,10 @@ class SimpleClassifier:
         Fits a given dataset onto SimpleClassifier
     predict(pred_x)
         Predicts label of samples in prediction array
+    save(self, name="simple_classifier")
+        Creates a zip archive of the SimpleClassifier object
+    load(self, simple_archive)
+        Loads data from zip archive into SimpleClassifier object
     """
 
     def __init__(self):
@@ -171,7 +176,7 @@ class SimpleClassifier:
         return self.sk_model.predict(pred_x)
 
     def save(self, name="simple_classifier"):
-        """Creates A zip archive file from SimpleClassifier
+        """Creates a zip archive file from SimpleClassifier
         attributes and sklearn model
 
         Parameters
@@ -182,12 +187,8 @@ class SimpleClassifier:
 
         dump(self.sk_model, "simple_classifier.joblib")
 
-        clf_dict = dict()
-        clf_dict["Name"] = self.name
-        clf_dict["GridSearch Duration"] = self.gridsearch_duration
-        clf_dict["Training Duration"] = self.train_duration
-        clf_dict["Attributes"] = self.attributes
-        clf_dict["Metrics"] = self.metrics
+        clf_str = str(self)
+        clf_dict = json.loads(clf_str)
         with open("simple_classifier.json", "w") as fp:
             json.dump(clf_dict, fp)
 
@@ -201,3 +202,30 @@ class SimpleClassifier:
 
         os.remove("simple_classifier.json")
         os.remove("simple_classifier.joblib")
+
+    def load(self, simple_archive):
+        """Creates a SimpleClassifier object from a
+        zip archive file
+
+        Parameters
+        ----------
+        simple_archive : str
+            The path to the zip archive file
+        """
+
+        zf = zipfile.ZipFile(simple_archive)
+        try:
+            byte_str = zf.read("simple_classifier.json")
+            dict_str = byte_str.decode("UTF-8")
+            clf_dict = ast.literal_eval(dict_str)
+            self.name = clf_dict["Type"]
+            self.gridsearch_duration = clf_dict["GridSearch Duration"]
+            self.train_duration = clf_dict["Training Duration"]
+            self.attributes = clf_dict["Parameters"]
+            self.metrics = clf_dict["Metrics"]
+
+            clf_joblib = zf.extract("simple_classifier.joblib")
+            self.sk_model = load(clf_joblib)
+            os.remove("simple_classifier.joblib")
+        except KeyError:
+            self.logger.exception("Archive file was not in correct format")
