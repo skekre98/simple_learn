@@ -19,3 +19,7 @@
 # SOFTWARE.
 
 from simple_learn.regressors.simple_regressor import SimpleRegressor
+from simple_learn.regressors.simple_regressor_list import (
+    SimpleRegressorList,
+    SimpleRegressorListObject,
+)
