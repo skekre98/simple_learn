@@ -25,6 +25,7 @@ import os
 import time
 import zipfile
 
+from tqdm import tqdm
 import numpy as np
 from joblib import dump, load
 from sklearn.metrics import f1_score, jaccard_score
@@ -80,7 +81,7 @@ class SimpleClassifier:
         self.train_duration = None
         self.failed_models = []
         self.logger = logging.getLogger()
-
+        
     def __str__(self):
 
         for k in self.attributes:
@@ -127,41 +128,44 @@ class SimpleClassifier:
         folds : int, optional
             The number of folds for cross validation
         """
-
-        estimators = all_estimators(type_filter="classifier")
-        for name, ClassifierClass in estimators:
-            if name in model_param_map:
-                param_grid = model_param_map[name]
-                grid_clf = GridSearchCV(
-                    ClassifierClass(),
-                    param_grid,
-                    cv=folds,
-                    scoring="accuracy",
-                    verbose=0,
-                    n_jobs=-1,
-                )
-                start = time.time()
-                try:
-                    grid_clf.fit(train_x, train_y)
-                except BaseException as error:
-                    self.failed_models.append(name)
-                    self.logger.warning(f"{name} failed due to, Error : {error}.")
-                    continue
-                end = time.time()
-                if grid_clf.best_score_ > self.metrics.get("Training Accuracy", 0.0):
-                    self.metrics["Training Accuracy"] = grid_clf.best_score_
-                    pred_y = grid_clf.predict(train_x)
-                    self.metrics["Jaccard Score"] = jaccard_score(
-                        train_y, pred_y, average="macro"
+        with tqdm(total=(len(model_param_map)), desc="Fitting Models", unit=" Cycle", ncols=100) as progressbar:
+            estimators = all_estimators(type_filter="classifier")
+            for name, ClassifierClass in (estimators):
+                if name in model_param_map:
+                    param_grid = model_param_map[name]
+                    grid_clf = GridSearchCV(
+                        ClassifierClass(),
+                        param_grid,
+                        cv=folds,
+                        scoring="accuracy",
+                        verbose=0,
+                        n_jobs=-1,
                     )
-                    self.metrics["F1 Score"] = f1_score(
-                        train_y, pred_y, average="macro"
-                    )
-                    self.sk_model = grid_clf.best_estimator_
-                    self.name = name
-                    self.attributes = grid_clf.best_params_
-                    self.train_duration = grid_clf.refit_time_
-                    self.gridsearch_duration = end - start
+                    progressbar.update(1) 
+                    start = time.time()
+                    try:
+                        grid_clf.fit(train_x, train_y)
+                        
+                    except BaseException as error:
+                        self.failed_models.append(name)
+                        self.logger.warning(f"{name} failed due to, Error : {error}.")
+                        continue
+                    end = time.time()
+                    
+                    if grid_clf.best_score_ > self.metrics.get("Training Accuracy", 0.0):
+                        self.metrics["Training Accuracy"] = grid_clf.best_score_
+                        pred_y = grid_clf.predict(train_x)
+                        self.metrics["Jaccard Score"] = jaccard_score(
+                            train_y, pred_y, average="macro"
+                        )
+                        self.metrics["F1 Score"] = f1_score(
+                            train_y, pred_y, average="macro"
+                        )
+                        self.sk_model = grid_clf.best_estimator_
+                        self.name = name
+                        self.attributes = grid_clf.best_params_
+                        self.train_duration = grid_clf.refit_time_
+                        self.gridsearch_duration = end - start
 
     def predict(self, pred_x):
         """Predicts class label based on input
