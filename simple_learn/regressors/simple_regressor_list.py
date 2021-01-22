@@ -93,7 +93,7 @@ class SimpleRegressorList:
     ----------
     ranked_list : list
         the ranked list of SimpleRegressors
-    metric : str { *fill in later* }
+    metric : str {auto, mae, mse, r2}
         the scoring metric for ranking models
     logger : logging.Logger
         logger for notifying user of warnings
@@ -107,4 +107,91 @@ class SimpleRegressorList:
         Removes a SimpleRegresspr at a specific index for usage
     """
 
-    def __init__(self, scoring=)
+    def __init__(self, scoring="auto"):
+        self.ranked_list = []
+        metric_map = {
+            "auto": "Training Score",
+            "mae": "Mean Absolute Error",
+            "mse": "Mean Squared Error",
+            "r2": "R-Squared",
+        }
+        self.metric = metric_map[scoring]
+
+    def __str__(self):
+        r = 1
+        res = []
+        for rgr in self.ranked_list:
+            obj = SimpleRegressorListObject(rgr, r)
+            res.append(str(obj))
+            r += 1
+        return "\n".join(res) if len(res) > 1 else "The List is Empty!"
+
+    def fit(self, train_x, train_y, folds=3):
+        """
+        Trains all regressors from parameter grid by running model algorithm search.
+
+        Creates a ranked list of models based on selected scoring metric.
+
+        Parameters
+        ----------
+        train_x : numpy.ndarray
+            The features for training regression model
+        train_y : numpy.ndarray
+            The corresponding label for feature array
+        folds : int, optional
+            The number of folds for cross validation
+        """
+
+        estimators = all_estimators(type_filter="regressor")
+        for name, RegressionClass in estimators:
+            if name in model_param_map:
+                param_grid = model_param_map[name]
+                grid_rgr = GridSearchCV(
+                    RegressionClass(),
+                    param_grid,
+                    cv=folds,
+                    scoring="neg_root_mean_squared_error",
+                    verbose=0,
+                    n_jobs=-1,
+                    error_score="raise",
+                )
+                start = time.time()
+                try:
+                    grid_rgr.fit(train_x, train_y)
+                except BaseException as error:
+                    self.logger.warning(f"{name} failed due to, Error : {error}.")
+                    continue
+                end = time.time()
+                rgr = SimpleRegressor()
+                rgr.metrics["Training Score"] = -grid_rgr.best_score_
+                pred_y = grid_rgr.predict(train_x)
+                rgr.metrics["Mean Absolute Error"] = mean_absolute_error(
+                    train_y, pred_y
+                )
+                rgr.metrics["Mean Squared Error"] = mean_squared_error(
+                    train_y, pred_y
+                )
+                rgr.metrics["R-Squared"] = r2_score(train_y, pred_y)
+                rgr.sk_model = grid_rgr.best_estimator_
+                rgr.name = name
+                rgr.attributes = grid_rgr.best_params_
+                rgr.train_duration = grid_rgr.refit_time_
+                rgr.gridsearch_duration = end - start
+                self.ranked_list.append(rgr)
+            metrik = lambda rgr: rgr.metrics[self.metric]
+            self.ranked_list.sort(reverse=True, key=metrik)
+
+        def pop(self, index=0):
+            """Removes SimpleRegressor from a specific index in ranked list.
+
+            Parameters
+            ----------
+            index : int
+                The index corresponding to the SimpleRegressor
+                being removed from ranked list
+            """
+
+            return self.ranked_list.pop(index)
+
+
+
