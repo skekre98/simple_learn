@@ -131,7 +131,7 @@ class SimpleClassifier:
         with tqdm(
             total=(len(model_param_map)),
             desc="Fitting Models",
-            unit=" Cycle",
+            unit=" Algorithm",
             ncols=100,
         ) as progressbar:
             estimators = all_estimators(type_filter="classifier")
