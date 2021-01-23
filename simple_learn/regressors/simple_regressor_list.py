@@ -179,7 +179,7 @@ class SimpleRegressorList:
                 rgr.gridsearch_duration = end - start
                 self.ranked_list.append(rgr)
             metrik = lambda rgr: rgr.metrics[self.metric]
-            self.ranked_list.sort(reverse=True, key=metrik)
+            self.ranked_list.sort(reverse=False, key=metrik)
 
         def pop(self, index=0):
             """Removes SimpleRegressor from a specific index in ranked list.
