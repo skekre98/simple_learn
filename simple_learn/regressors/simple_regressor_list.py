@@ -18,7 +18,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import json 
+import json
 import logging
 import time
 
@@ -27,17 +27,18 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from sklearn.model_selection import GridSearchCV
 from sklearn.utils import all_estimators
 
+from simple_learn.encoders import simple_model_encoder
 from simple_learn.regressors import SimpleRegressor
 from simple_learn.regressors.param_grid import model_param_map
-from simple_learn.encoders import simple_model_encoder
+
 
 class SimpleRegressorListObject:
     """
-    A class used to keep track of SimpleRegressors and corresponding rank for 
+    A class used to keep track of SimpleRegressors and corresponding rank for
     terminal display
-    
+
     '''
-    
+
     Attributes
     ----------
     rgr : simple_learn.regressors.SimpleRegressor
@@ -55,7 +56,7 @@ class SimpleRegressorListObject:
         for k in self.rgr.attributes:
             if type(self.rgr.attributes[k]) == np.int64:
                 self.rgr.attributes[k] = int(self.rgr.attributes[k])
-        
+
         attr = {
             "Type": self.rgr.name,
             "Rank": self.rank,
@@ -68,7 +69,7 @@ class SimpleRegressorListObject:
 
         str_out = json.dumps(attr, cls=simple_model_encoder.npEncoder, indent=4)
         return str_out
-    
+
     def __repr__(self):
         attr = {
             "Type": self.rgr.name,
@@ -82,6 +83,7 @@ class SimpleRegressorListObject:
 
         repr_out = json.dumps(attr, cls=simple_model_encoder.npEncoder, indent=4)
         return repr_out
+
 
 class SimpleRegressorList:
     """
@@ -168,9 +170,7 @@ class SimpleRegressorList:
                 rgr.metrics["Mean Absolute Error"] = mean_absolute_error(
                     train_y, pred_y
                 )
-                rgr.metrics["Mean Squared Error"] = mean_squared_error(
-                    train_y, pred_y
-                )
+                rgr.metrics["Mean Squared Error"] = mean_squared_error(train_y, pred_y)
                 rgr.metrics["R-Squared"] = r2_score(train_y, pred_y)
                 rgr.sk_model = grid_rgr.best_estimator_
                 rgr.name = name
@@ -192,6 +192,3 @@ class SimpleRegressorList:
         """
 
         return self.ranked_list.pop(index)
-
-
-

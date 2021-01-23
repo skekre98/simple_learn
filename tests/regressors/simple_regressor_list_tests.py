@@ -24,10 +24,12 @@ import warnings
 warnings.filterwarnings("ignore")
 
 import numpy as np
-from sklearn import datasets
 from scipy.stats import levene
+from sklearn import datasets
 from sklearn.datasets import make_regression
+
 from simple_learn.regressors import SimpleRegressorList
+
 
 class TestSimpleRegressorList(unittest.TestCase):
     def test_regression(self):
@@ -72,6 +74,6 @@ class TestSimpleRegressorList(unittest.TestCase):
         self.assertTrue(p0 > 0.05)
         self.assertTrue(p1 < p0)
 
+
 if __name__ == "__main__":
     unittest.main()
-
