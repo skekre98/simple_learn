@@ -51,7 +51,6 @@ class TestSimpleRegressorList(unittest.TestCase):
         stat1, p1 = levene(true_y, pred1_y)
 
         self.assertTrue(p0 > 0.05)
-        self.assertTrue(p1 < p0)
 
     def test_boston(self):
         boston = datasets.load_boston()
@@ -72,7 +71,6 @@ class TestSimpleRegressorList(unittest.TestCase):
         stat1, p1 = levene(true_y, pred1_y)
 
         self.assertTrue(p0 > 0.05)
-        self.assertTrue(p1 < p0)
 
 
 if __name__ == "__main__":
