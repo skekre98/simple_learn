@@ -104,7 +104,7 @@ class SimpleRegressorList:
         Fits a given dataset onto SimpleRegressor and creates a ranked list based
         on scores
     pop(index = 0)
-        Removes a SimpleRegresspr at a specific index for usage
+        Removes a SimpleRegressor at a specific index for usage
     """
 
     def __init__(self, scoring="auto"):
@@ -181,17 +181,17 @@ class SimpleRegressorList:
             metrik = lambda rgr: rgr.metrics[self.metric]
             self.ranked_list.sort(reverse=False, key=metrik)
 
-        def pop(self, index=0):
-            """Removes SimpleRegressor from a specific index in ranked list.
+    def pop(self, index=0):
+        """Removes SimpleRegressor from a specific index in ranked list.
 
-            Parameters
-            ----------
-            index : int
-                The index corresponding to the SimpleRegressor
-                being removed from ranked list
-            """
+        Parameters
+        ----------
+        index : int
+            The index corresponding to the SimpleRegressor
+            being removed from ranked list
+        """
 
-            return self.ranked_list.pop(index)
+        return self.ranked_list.pop(index)
 
 
 
