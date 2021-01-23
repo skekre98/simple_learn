@@ -118,6 +118,7 @@ class SimpleRegressorList:
             "r2": "R-Squared",
         }
         self.metric = metric_map[scoring]
+        self.logger = logging.getLogger()
 
     def __str__(self):
         r = 1

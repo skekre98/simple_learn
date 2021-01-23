@@ -43,14 +43,15 @@ class TestSimpleRegressorList(unittest.TestCase):
 
         rgr1 = rgr_list.pop(1)
         rgr0 = rgr_list.pop()
-        
+
         pred0_y = rgr0.predict(true_x)
         pred1_y = rgr1.predict(true_x)
-        
+
         stat0, p0 = levene(true_y, pred0_y)
         stat1, p1 = levene(true_y, pred1_y)
 
         self.assertTrue(p0 > 0.05)
+        self.assertTrue(p1 < p0)
 
     def test_boston(self):
         boston = datasets.load_boston()
@@ -66,11 +67,12 @@ class TestSimpleRegressorList(unittest.TestCase):
 
         pred0_y = rgr0.predict(true_x)
         pred1_y = rgr1.predict(true_x)
-        
+
         stat0, p0 = levene(true_y, pred0_y)
         stat1, p1 = levene(true_y, pred1_y)
 
         self.assertTrue(p0 > 0.05)
+        self.assertTrue(p1 < p0)
 
 
 if __name__ == "__main__":
