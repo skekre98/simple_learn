@@ -24,13 +24,13 @@ import logging
 import os
 import time
 import zipfile
-from tqdm import tqdm
 
 import numpy as np
 from joblib import dump, load
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from sklearn.model_selection import GridSearchCV
 from sklearn.utils import all_estimators
+from tqdm import tqdm
 
 from simple_learn.encoders import simple_model_encoder
 from simple_learn.regressors.param_grid import model_param_map
@@ -154,7 +154,9 @@ class SimpleRegressor:
                     end = time.time()
                     if self.metrics.get(
                         "Training Score"
-                    ) is None or -grid_rgr.best_score_ < self.metrics.get("Training Score"):
+                    ) is None or -grid_rgr.best_score_ < self.metrics.get(
+                        "Training Score"
+                    ):
                         self.metrics["Training Score"] = -grid_rgr.best_score_
                         pred_y = grid_rgr.predict(train_x)
                         self.metrics["Mean Absolute Error"] = mean_absolute_error(
