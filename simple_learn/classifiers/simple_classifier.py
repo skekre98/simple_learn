@@ -30,6 +30,7 @@ from joblib import dump, load
 from sklearn.metrics import f1_score, jaccard_score
 from sklearn.model_selection import GridSearchCV
 from sklearn.utils import all_estimators
+from simple_learn.simple_logging import custom_logging
 from tqdm import tqdm
 
 from simple_learn.classifiers.param_grid import model_param_map
@@ -128,6 +129,9 @@ class SimpleClassifier:
         folds : int, optional
             The number of folds for cross validation
         """
+        log = logging.getLogger(__name__)
+        log.setLevel(logging.INFO)
+        log.addHandler(custom_logging.TqdmLoggingHandler())
         with tqdm(
             total=(len(model_param_map)),
             desc="Fitting Models",
@@ -152,7 +156,7 @@ class SimpleClassifier:
                         grid_clf.fit(train_x, train_y)
                     except BaseException as error:
                         self.failed_models.append(name)
-                        self.logger.warning(f"{name} failed due to, Error : {error}.")
+                        log.info(f"{name} failed due to, Error : {error}.")
                         continue
                     end = time.time()
 

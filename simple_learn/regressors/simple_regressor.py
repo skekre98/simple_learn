@@ -24,13 +24,14 @@ import logging
 import os
 import time
 import zipfile
+from tqdm import tqdm
+from simple_learn.simple_logging import custom_logging
 
 import numpy as np
 from joblib import dump, load
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from sklearn.model_selection import GridSearchCV
 from sklearn.utils import all_estimators
-from tqdm import tqdm
 
 from simple_learn.encoders import simple_model_encoder
 from simple_learn.regressors.param_grid import model_param_map
@@ -124,6 +125,9 @@ class SimpleRegressor:
                  folds : int, optional
                      The number of folds for cross validation
                  """
+        log = logging.getLogger(__name__)
+        log.setLevel(logging.INFO)
+        log.addHandler(custom_logging.TqdmLoggingHandler())
         with tqdm(
             total=(len(model_param_map)),
             desc="Fitting Models",
@@ -149,8 +153,9 @@ class SimpleRegressor:
                         grid_rgr.fit(train_x, train_y)
                     except BaseException as error:
                         self.failed_models.append(name)
-                        self.logger.warning(f"{name} failed due to, Error : {error}.")
+                        log.info(f"{name} failed due to, Error : {error}.")
                         continue
+                        
                     end = time.time()
                     if self.metrics.get(
                         "Training Score"
