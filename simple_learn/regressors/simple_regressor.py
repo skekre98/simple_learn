@@ -24,17 +24,17 @@ import logging
 import os
 import time
 import zipfile
-from tqdm import tqdm
-from simple_learn.simple_logging import custom_logging
 
 import numpy as np
 from joblib import dump, load
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from sklearn.model_selection import GridSearchCV
 from sklearn.utils import all_estimators
+from tqdm import tqdm
 
 from simple_learn.encoders import simple_model_encoder
 from simple_learn.regressors.param_grid import model_param_map
+from simple_learn.simple_logging import custom_logging
 
 
 class SimpleRegressor:
@@ -155,7 +155,7 @@ class SimpleRegressor:
                         self.failed_models.append(name)
                         log.info(f"{name} failed due to, Error : {error}.")
                         continue
-                        
+
                     end = time.time()
                     if self.metrics.get(
                         "Training Score"

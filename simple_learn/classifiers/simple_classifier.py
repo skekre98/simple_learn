@@ -30,11 +30,11 @@ from joblib import dump, load
 from sklearn.metrics import f1_score, jaccard_score
 from sklearn.model_selection import GridSearchCV
 from sklearn.utils import all_estimators
-from simple_learn.simple_logging import custom_logging
 from tqdm import tqdm
 
 from simple_learn.classifiers.param_grid import model_param_map
 from simple_learn.encoders import simple_model_encoder
+from simple_learn.simple_logging import custom_logging
 
 
 class SimpleClassifier:
