@@ -26,10 +26,12 @@ import numpy as np
 from sklearn.metrics import f1_score, jaccard_score
 from sklearn.model_selection import GridSearchCV
 from sklearn.utils import all_estimators
+from tqdm import tqdm
 
 from simple_learn.classifiers import SimpleClassifier
 from simple_learn.classifiers.param_grid import model_param_map
 from simple_learn.encoders import simple_model_encoder
+from simple_learn.simple_logging import custom_logging
 
 
 class SimpleClassifierListObject:
@@ -114,6 +116,7 @@ class SimpleClassifierList:
 
     def __init__(self, scoring="auto"):
         self.ranked_list = []
+        self.logger = logging.getLogger()
         metric_map = {
             "auto": "Training Accuracy",
             "jaccard": "Jaccard Score",
@@ -155,41 +158,50 @@ class SimpleClassifierList:
         folds : int, optional
             The number of folds for cross validation
         """
-
-        estimators = all_estimators(type_filter="classifier")
-        for name, ClassifierClass in estimators:
-            if name in model_param_map:
-                param_grid = model_param_map[name]
-                grid_clf = GridSearchCV(
-                    ClassifierClass(),
-                    param_grid,
-                    cv=folds,
-                    scoring="accuracy",
-                    verbose=0,
-                    n_jobs=-1,
-                )
-                start = time.time()
-                try:
-                    grid_clf.fit(train_x, train_y)
-                except BaseException as error:
-                    self.logger.warning(f"{name} failed due to, Error : {error}.")
-                    continue
-                end = time.time()
-                clf = SimpleClassifier()
-                clf.metrics["Training Accuracy"] = grid_clf.best_score_
-                pred_y = grid_clf.predict(train_x)
-                clf.metrics["Jaccard Score"] = jaccard_score(
-                    train_y, pred_y, average="macro"
-                )
-                clf.metrics["F1 Score"] = f1_score(train_y, pred_y, average="macro")
-                clf.sk_model = grid_clf.best_estimator_
-                clf.name = name
-                clf.attributes = grid_clf.best_params_
-                clf.train_duration = grid_clf.refit_time_
-                clf.gridsearch_duration = end - start
-                self.ranked_list.append(clf)
-        metrik = lambda clf: clf.metrics[self.metric]
-        self.ranked_list.sort(reverse=True, key=metrik)
+        log = logging.getLogger(__name__)
+        log.setLevel(logging.INFO)
+        log.addHandler(custom_logging.TqdmLoggingHandler())
+        with tqdm(
+            total=(len(model_param_map)),
+            desc="Fitting Models",
+            unit=" Algorithm",
+            ncols=100,
+        ) as progressbar:
+            estimators = all_estimators(type_filter="classifier")
+            for name, ClassifierClass in estimators:
+                if name in model_param_map:
+                    param_grid = model_param_map[name]
+                    grid_clf = GridSearchCV(
+                        ClassifierClass(),
+                        param_grid,
+                        cv=folds,
+                        scoring="accuracy",
+                        verbose=0,
+                        n_jobs=-1,
+                    )
+                    progressbar.update(1)
+                    start = time.time()
+                    try:
+                        grid_clf.fit(train_x, train_y)
+                    except BaseException as error:
+                        log.info(f"{name} failed due to, Error : {error}.")
+                        continue
+                    end = time.time()
+                    clf = SimpleClassifier()
+                    clf.metrics["Training Accuracy"] = grid_clf.best_score_
+                    pred_y = grid_clf.predict(train_x)
+                    clf.metrics["Jaccard Score"] = jaccard_score(
+                        train_y, pred_y, average="macro"
+                    )
+                    clf.metrics["F1 Score"] = f1_score(train_y, pred_y, average="macro")
+                    clf.sk_model = grid_clf.best_estimator_
+                    clf.name = name
+                    clf.attributes = grid_clf.best_params_
+                    clf.train_duration = grid_clf.refit_time_
+                    clf.gridsearch_duration = end - start
+                    self.ranked_list.append(clf)
+            metrik = lambda clf: clf.metrics[self.metric]
+            self.ranked_list.sort(reverse=True, key=metrik)
 
     def pop(self, index=0):
         """Removes SimpleClassifier from a specific
