@@ -62,8 +62,8 @@ function github_release {
     rm -rf dist/
     git add .
     git commit -a -m "Release version ${version}"
-    git tag -a ${version} -m "Release version ${version}" release-${version}
-    git push origin ${version}
+    git tag -a v${version} -m "Release version ${version}" release-${version}
+    git push origin v${version}
     git checkout main
     git branch -D release-${version}
 }
