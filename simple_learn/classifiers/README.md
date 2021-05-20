@@ -1,1 +1,1 @@
-# SimpleRegressor
+# SimpleClassifier
