@@ -19,6 +19,10 @@
 # SOFTWARE.
 
 from simple_learn.version import version as current_version
+from simple_learn.classifiers import *
+from simple_learn.regressors import *
+from simple_learn.encoders import *
+from simple_learn.simple_logging import *
 
 __name__ = "simple_learn"
 __version__ = current_version

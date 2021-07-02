@@ -26,6 +26,13 @@ with open("simple_learn/README.md", "r") as fh:
     long_description = fh.read()
 
 requirements = ["numpy", "scikit-learn>=0.23.1"]
+simple_packages = [
+    'simple_learn', 
+    'simple_learn.classifiers', 
+    'simple_learn.regressors', 
+    'simple_learn.encoders', 
+    'simple_learn.simple_logging',
+]
 
 setup(
     name="simple_learn",
@@ -37,7 +44,7 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/skekre98/simple_learn",
-    packages=find_packages(),
+    packages=simple_packages,
     install_requires=requirements,
     classifiers=[
         "Programming Language :: Python :: 3",
