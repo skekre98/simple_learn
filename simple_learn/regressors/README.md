@@ -1,8 +1,8 @@
 # SimpleRegressor
 
-This module contains the implementation of *SimpleClassifier* and *SimpleClassifierList*.
+This module contains the implementation of *SimpleRegressor* and *SimpleRegressorList*.
 
-*SimpleClassifier*
+*SimpleRegressor*
 ```python
 >>> from sklearn.datasets import load_diabetes
 >>> from simple_learn.regressors import SimpleRegressor
@@ -32,7 +32,7 @@ This module contains the implementation of *SimpleClassifier* and *SimpleClassif
 }
 ```
 
-*SimpleClassifierList*
+*SimpleRegressorList*
 ```python
 >>> from sklearn.datasets import load_diabetes
 >>> from simple_learn.regressors import SimpleRegressorList
