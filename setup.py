@@ -26,8 +26,13 @@ with open("simple_learn/README.md", "r") as fh:
     long_description = fh.read()
 
 requirements = ["numpy", "scikit-learn>=0.23.1"]
-simple_packages = find_packages()
-print(simple_packages)
+simple_packages = [
+    'simple_learn', 
+    'simple_learn.classifiers', 
+    'simple_learn.regressors', 
+    'simple_learn.encoders', 
+    'simple_learn.simple_logging',
+]
 
 setup(
     name="simple_learn",
