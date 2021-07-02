@@ -21,12 +21,12 @@
 import json
 import logging
 import time
-from tqdm import tqdm
 
 import numpy as np
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from sklearn.model_selection import GridSearchCV
 from sklearn.utils import all_estimators
+from tqdm import tqdm
 
 from simple_learn.encoders import simple_model_encoder
 from simple_learn.regressors import SimpleRegressor
@@ -188,7 +188,9 @@ class SimpleRegressorList:
                     rgr.metrics["Mean Absolute Error"] = mean_absolute_error(
                         train_y, pred_y
                     )
-                    rgr.metrics["Mean Squared Error"] = mean_squared_error(train_y, pred_y)
+                    rgr.metrics["Mean Squared Error"] = mean_squared_error(
+                        train_y, pred_y
+                    )
                     rgr.metrics["R-Squared"] = r2_score(train_y, pred_y)
                     rgr.sk_model = grid_rgr.best_estimator_
                     rgr.name = name

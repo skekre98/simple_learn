@@ -18,11 +18,11 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from simple_learn.version import version as current_version
 from simple_learn.classifiers import *
-from simple_learn.regressors import *
 from simple_learn.encoders import *
+from simple_learn.regressors import *
 from simple_learn.simple_logging import *
+from simple_learn.version import version as current_version
 
 __name__ = "simple_learn"
 __version__ = current_version

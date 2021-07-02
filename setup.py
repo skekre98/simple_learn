@@ -27,11 +27,11 @@ with open("simple_learn/README.md", "r") as fh:
 
 requirements = ["numpy", "scikit-learn>=0.23.1"]
 simple_packages = [
-    'simple_learn', 
-    'simple_learn.classifiers', 
-    'simple_learn.regressors', 
-    'simple_learn.encoders', 
-    'simple_learn.simple_logging',
+    "simple_learn",
+    "simple_learn.classifiers",
+    "simple_learn.regressors",
+    "simple_learn.encoders",
+    "simple_learn.simple_logging",
 ]
 
 setup(
