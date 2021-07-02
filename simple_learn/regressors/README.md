@@ -6,7 +6,7 @@ This module contains the implementation of *SimpleRegressor* and *SimpleRegresso
 ```python
 >>> from sklearn.datasets import load_diabetes
 >>> from simple_learn.regressors import SimpleRegressor
->>> 
+>>>
 >>> diabetes = load_diabetes()
 >>> rgr = SimpleRegressor()
 >>> rgr.fit(diabetes.data, diabetes.target)
@@ -36,7 +36,7 @@ This module contains the implementation of *SimpleRegressor* and *SimpleRegresso
 ```python
 >>> from sklearn.datasets import load_diabetes
 >>> from simple_learn.regressors import SimpleRegressorList
->>> 
+>>>
 >>> diabetes = load_diabetes()
 >>> rgr_list.fit(diabetes.data, diabetes.target)
 >>> rgr_list

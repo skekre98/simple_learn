@@ -26,6 +26,7 @@ import numpy as np
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from sklearn.model_selection import GridSearchCV
 from sklearn.utils import all_estimators
+from tqdm import tqdm
 
 from simple_learn.encoders import simple_model_encoder
 from simple_learn.regressors import SimpleRegressor
@@ -155,41 +156,50 @@ class SimpleRegressorList:
         """
 
         estimators = all_estimators(type_filter="regressor")
-        for name, RegressionClass in estimators:
-            if name in model_param_map:
-                param_grid = model_param_map[name]
-                grid_rgr = GridSearchCV(
-                    RegressionClass(),
-                    param_grid,
-                    cv=folds,
-                    scoring="neg_root_mean_squared_error",
-                    verbose=0,
-                    n_jobs=-1,
-                    error_score="raise",
-                )
-                start = time.time()
-                try:
-                    grid_rgr.fit(train_x, train_y)
-                except BaseException as error:
-                    self.logger.warning(f"{name} failed due to, Error : {error}.")
-                    continue
-                end = time.time()
-                rgr = SimpleRegressor()
-                rgr.metrics["Training Score"] = -grid_rgr.best_score_
-                pred_y = grid_rgr.predict(train_x)
-                rgr.metrics["Mean Absolute Error"] = mean_absolute_error(
-                    train_y, pred_y
-                )
-                rgr.metrics["Mean Squared Error"] = mean_squared_error(train_y, pred_y)
-                rgr.metrics["R-Squared"] = r2_score(train_y, pred_y)
-                rgr.sk_model = grid_rgr.best_estimator_
-                rgr.name = name
-                rgr.attributes = grid_rgr.best_params_
-                rgr.train_duration = grid_rgr.refit_time_
-                rgr.gridsearch_duration = end - start
-                self.ranked_list.append(rgr)
-            metrik = lambda rgr: rgr.metrics[self.metric]
-            self.ranked_list.sort(reverse=False, key=metrik)
+        with tqdm(
+            total=(len(model_param_map)),
+            desc="Creating Regressor List",
+            unit=" Regressor",
+            ncols=100,
+        ) as progressbar:
+            for name, RegressionClass in estimators:
+                if name in model_param_map:
+                    param_grid = model_param_map[name]
+                    grid_rgr = GridSearchCV(
+                        RegressionClass(),
+                        param_grid,
+                        cv=folds,
+                        scoring="neg_root_mean_squared_error",
+                        verbose=0,
+                        n_jobs=-1,
+                        error_score="raise",
+                    )
+                    progressbar.update(1)
+                    start = time.time()
+                    try:
+                        grid_rgr.fit(train_x, train_y)
+                    except BaseException as error:
+                        self.logger.warning(f"{name} failed due to, Error : {error}.")
+                        continue
+                    end = time.time()
+                    rgr = SimpleRegressor()
+                    rgr.metrics["Training Score"] = -grid_rgr.best_score_
+                    pred_y = grid_rgr.predict(train_x)
+                    rgr.metrics["Mean Absolute Error"] = mean_absolute_error(
+                        train_y, pred_y
+                    )
+                    rgr.metrics["Mean Squared Error"] = mean_squared_error(
+                        train_y, pred_y
+                    )
+                    rgr.metrics["R-Squared"] = r2_score(train_y, pred_y)
+                    rgr.sk_model = grid_rgr.best_estimator_
+                    rgr.name = name
+                    rgr.attributes = grid_rgr.best_params_
+                    rgr.train_duration = grid_rgr.refit_time_
+                    rgr.gridsearch_duration = end - start
+                    self.ranked_list.append(rgr)
+                metrik = lambda rgr: rgr.metrics[self.metric]
+                self.ranked_list.sort(reverse=False, key=metrik)
 
     def pop(self, index=0):
         """Removes SimpleRegressor from a specific index in ranked list.
