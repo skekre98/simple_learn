@@ -6,7 +6,7 @@
 [![PyPI license](https://img.shields.io/pypi/l/simple-learn.svg?left_color=black)](https://pypi.python.org/pypi/simple-learn/)
 [![installs](https://static.pepy.tech/personalized-badge/simple-learn?kill_cache=1&period=total&units=international_system&left_color=grey&right_color=orange&left_text=installs)](https://pepy.tech/project/simple-learn)
 
-[SimpleLearn](https://pypi.org/project/simple-learn/) is a python package that aims to create an automatic process of model algorithm selection, hyper parameter tuning, iterative modelling, and model assessment. This package is built on top of [sklearn](https://scikit-learn.org/) and leaves all the flexibility and API support available to you. Keep in mind this package does NOT automate the entire process of data science and assumes you are handling tasks such as data preparation and feature engineering. A strong model algorithm cannot apologize for bad data.
+[SimpleLearn](https://pypi.org/project/simple-learn/) is a python package that aims to create an automatic process of model algorithm selection, hyper parameter tuning, iterative modelling, and model assessment. This package is built on top of [sklearn](https://scikit-learn.org/) and leaves all the flexibility and API support available to you. Keep in mind this package does NOT automate the entire process of data science and assumes you are handling tasks such as data preparation and feature engineering.
 
 ## Install
 
